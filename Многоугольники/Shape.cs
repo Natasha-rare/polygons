@@ -48,7 +48,7 @@ namespace Многоугольники
 
         public override bool IsInside(int x, int y)
         {
-            return (((this.x + R - x) * (this.x + R - x) + (this.y + R - y) * (this.y + R - y)) < R * R);
+            return (((this.x + R - x) * (this.x + R - x) + (this.y + R - y) * (this.y + R - y)) <= R * R);
         }
     }
 
