@@ -15,59 +15,58 @@ namespace Многоугольники
 
         public Shape(int x, int y) { this.x = x; this.y = y; }
 
-        public Shape()
+        static Shape()
         {
             R = 2;
             lineC = Color.Black;
             fillC = Color.LightPink;
         }
 
-        public virtual void Draw(Graphics e)
-        {
+        public abstract void Draw(Graphics e);
 
-        }
-
-        public virtual bool IsInside(int x, int y)
-        {
-            // for square
-            return ((this.x <= x && x <= this.x + R) && (this.y <= y && y <= this.y + R));
-        }
+        public abstract bool IsInside(int x, int y);
     }
 
     class Circle : Shape
     {
-        public Circle() : base() { }
+        // public Circle() : base() { }
 
         public Circle(int x, int y) : base(x, y) { }
 
         public override void Draw(Graphics e)
         {
-            e.DrawEllipse(new Pen(lineC), x, y, R, R);
-            e.FillEllipse(new SolidBrush(fillC), x, y, R, R);
+            e.DrawEllipse(new Pen(lineC), x - R / 2, y - R/2, R, R);
+            e.FillEllipse(new SolidBrush(fillC), x - R/2, y - R/2, R, R);
         }
 
         public override bool IsInside(int x, int y)
         {
-            return (((this.x + R - x) * (this.x + R - x) + (this.y + R - y) * (this.y + R - y)) <= R * R);
+            return (((x - this.x) * (x - this.x) + (y - this.y) * (y - this.y)) <= R * R);
         }
     }
 
     class Square : Shape
     {
-        public Square() : base()
-        { }
+        public int[] points = new int[4];
+        // public Square() : base()
+        // { }
 
         public Square(int x, int y) : base(x, y) { }
 
         public override void Draw(Graphics e)
         {
-            e.DrawRectangle(new Pen(lineC), x, y, R, R);
-            e.FillRectangle(new SolidBrush(fillC), x, y, R, R);
+            int delta = (int)(R * Math.Sqrt(2) / 2);
+            points[0] = x - delta;
+            points[1] = y - delta;
+            points[2] = x + delta;
+            points[3] = y + delta;
+            e.DrawRectangle(new Pen(lineC), points[0], points[1], points[2], points[3]);
+            e.FillRectangle(new SolidBrush(fillC), points[0], points[1], points[2], points[3]);
         }
 
         public override bool IsInside(int x, int y)
         {
-            return base.IsInside(x, y);
+             return ((points[0] <= x && x <= points[2]) && (points[1] <= y && y <= points[3]));
         }
     }
 
@@ -75,15 +74,15 @@ namespace Многоугольники
     {
         public Point[] points = { new Point(), new Point(), new Point()};
 
-        public Triangle() : base() { }
+        // public Triangle() : base() { }
 
         public Triangle(int x, int y) : base(x, y) {}
 
         public override void Draw(Graphics e)
         {
-            points[0] = new Point(x, y + (int)Math.Sqrt(R * R - R / 2 * R / 2));
-            points[1] = new Point(x + R / 2, y);
-            points[2] = new Point(x + R, y + (int)Math.Sqrt(R * R - R / 2 * R / 2));
+            points[0] = new Point(x, y - R);    
+            points[1] = new Point(x - (int)Math.Sqrt(3) / 2, y + R / 2);
+            points[2] = new Point(x + (int)Math.Sqrt(3) / 2, y + R / 2);
             e.DrawPolygon(new Pen(lineC), points);
             e.FillPolygon(new SolidBrush(fillC), points);
         }
