@@ -12,12 +12,13 @@ namespace Многоугольники
         public static int R;
         public int x, y;
         public static Color lineC, fillC;
+        public bool is_checked = false;
 
         public Shape(int x, int y) { this.x = x; this.y = y; }
 
         static Shape()
         {
-            R = 2;
+            R = 30;
             lineC = Color.Black;
             fillC = Color.LightPink;
         }
@@ -35,8 +36,8 @@ namespace Многоугольники
 
         public override void Draw(Graphics e)
         {
-            e.DrawEllipse(new Pen(lineC), x - R / 2, y - R/2, R, R);
             e.FillEllipse(new SolidBrush(fillC), x - R/2, y - R/2, R, R);
+            e.DrawEllipse(new Pen(lineC), x - R / 2, y - R / 2, R, R);
         }
 
         public override bool IsInside(int x, int y)
@@ -58,15 +59,15 @@ namespace Многоугольники
             int delta = (int)(R * Math.Sqrt(2) / 2);
             points[0] = x - delta;
             points[1] = y - delta;
-            points[2] = x + delta;
-            points[3] = y + delta;
-            e.DrawRectangle(new Pen(lineC), points[0], points[1], points[2], points[3]);
+            points[2] = delta * 2;
+            points[3] = 2 * delta;
             e.FillRectangle(new SolidBrush(fillC), points[0], points[1], points[2], points[3]);
+            e.DrawRectangle(new Pen(lineC), points[0], points[1], points[2], points[3]);
         }
 
         public override bool IsInside(int x, int y)
         {
-             return ((points[0] <= x && x <= points[2]) && (points[1] <= y && y <= points[3]));
+             return ((points[0] <= x && x <= points[0] + points[2]) && (points[1] <= y && y <= points[1] + points[3]));
         }
     }
 
@@ -81,10 +82,11 @@ namespace Многоугольники
         public override void Draw(Graphics e)
         {
             points[0] = new Point(x, y - R);    
-            points[1] = new Point(x - (int)Math.Sqrt(3) / 2, y + R / 2);
-            points[2] = new Point(x + (int)Math.Sqrt(3) / 2, y + R / 2);
-            e.DrawPolygon(new Pen(lineC), points);
+            points[1] = new Point(x - (int)(R * Math.Sqrt(3) / 2), y + R / 2);
+            points[2] = new Point(x + (int)(R * Math.Sqrt(3) / 2), y + R / 2);
             e.FillPolygon(new SolidBrush(fillC), points);
+            e.DrawPolygon(new Pen(lineC), points);
+            
         }
         
         public override bool IsInside(int x, int y)
