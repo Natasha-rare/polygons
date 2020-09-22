@@ -14,12 +14,12 @@ namespace Многоугольники
     {
         // Shape[] figures = new Shape[3];
         bool flag_checked = false;
+        byte figure_index = 0; // 0 - круг 1- квадрат 2-треугольник
         List<Shape> figures = new List<Shape>();
 
         public Form1()
         {
             InitializeComponent();
-            
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
@@ -34,9 +34,9 @@ namespace Многоугольники
         private void Form1_Load(object sender, EventArgs e)
         {
             DoubleBuffered = true;
-            figures.Add(new Triangle(60, 60));
-            figures.Add(new Circle(100, 100));
-            figures.Add(new Square(30, 30));
+            // figures.Add(new Triangle(60, 60));
+            // figures.Add(new Circle(100, 100));
+            // figures.Add(new Square(30, 30));
             this.Invalidate();
         }
 
@@ -77,8 +77,40 @@ namespace Многоугольники
                 }
             }
             if (!flag_checked)
-                figures.Add(new Triangle(e.X, e.Y));
+                switch (figure_index)
+                {
+                    case 0:
+                        figures.Add(new Circle(e.X, e.Y));
+                        break;
+                    case 1:
+                        figures.Add(new Square(e.X, e.Y));
+                        break;
+                    case 2:
+                        figures.Add(new Triangle(e.X, e.Y));
+                        break;
+                }
+                
             this.Invalidate();
+        }
+
+        private void shapeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void circleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            figure_index = 0;
+        }
+
+        private void squareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            figure_index = 1;
+        }
+
+        private void triangleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            figure_index = 2;
         }
     }
 }
