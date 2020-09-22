@@ -10,7 +10,7 @@ namespace Многоугольники
     abstract class Shape
     {
         public static int R;
-        public int x, y;
+        public int x, y, d_x, d_y;
         public static Color lineC, fillC;
         public bool is_checked = false;
 

@@ -12,8 +12,9 @@ namespace Многоугольники
 {
     public partial class Form1 : Form
     {
-        Shape[] figures = new Shape[3];
+        // Shape[] figures = new Shape[3];
         bool flag_checked = false;
+        List<Shape> figures = new List<Shape>();
 
         public Form1()
         {
@@ -32,9 +33,10 @@ namespace Многоугольники
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            figures[0] = new Triangle(60, 60);
-            figures[1] = new Circle(100, 100);
-            figures[2] = new Square(30, 30);
+            DoubleBuffered = true;
+            figures.Add(new Triangle(60, 60));
+            figures.Add(new Circle(100, 100));
+            figures.Add(new Square(30, 30));
             this.Invalidate();
         }
 
@@ -45,7 +47,6 @@ namespace Многоугольники
             {
                 figure.Draw(g);
             }
-            
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -55,9 +56,9 @@ namespace Многоугольники
                 foreach (Shape figure in figures)
                     if (figure.is_checked) 
                     { 
-                        figure.x = e.X;
-                        figure.y = e.Y;
-                        break;
+                        figure.x = e.X - figure.d_x;
+                        figure.y = e.Y - figure.d_y;
+                        // break;
                     }
                 this.Refresh();
             }
@@ -71,10 +72,12 @@ namespace Многоугольники
                 {
                     flag_checked = true;
                     figure.is_checked = true;
+                    figure.d_x = e.X - figure.x;
+                    figure.d_y = e.Y - figure.y;
                 }
             }
             if (!flag_checked)
-                figures[0] = new Triangle(e.X, e.Y);
+                figures.Add(new Triangle(e.X, e.Y));
             this.Invalidate();
         }
     }
