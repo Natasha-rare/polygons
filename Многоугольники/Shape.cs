@@ -36,8 +36,8 @@ namespace Многоугольники
 
         public override void Draw(Graphics e)
         {
-            e.FillEllipse(new SolidBrush(fillC), x - R/2, y - R/2, R, R);
-            e.DrawEllipse(new Pen(lineC), x - R / 2, y - R / 2, R, R);
+            e.FillEllipse(new SolidBrush(fillC), x - R, y - R, 2 * R, 2 * R);
+            e.DrawEllipse(new Pen(lineC), x - R, y - R, 2 * R, 2 * R);
         }
 
         public override bool IsInside(int x, int y)
