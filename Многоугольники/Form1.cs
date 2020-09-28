@@ -129,11 +129,41 @@ namespace Многоугольники
         {
             figure_index = 2;
         }
-        /*
-        public int Rotate(int[] A, int[] B, int[] C)
+
+        private void lineColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // > 0 => третья точка правее, иначе - левее
-            return (B[0] - A[0]) * (C[1] - B[1]) - (B[1] - A[1]) * (C[0] - B[0]);
-        }*/
+            ColorDialog MyDialog = new ColorDialog();
+            // Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = Shape.lineC;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                Shape.lineC = MyDialog.Color;
+        }
+
+        private void fillColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            // Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = Shape.fillC;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                Shape.fillC = MyDialog.Color;
+        }
+        /*
+public int Rotate(int[] A, int[] B, int[] C)
+{
+// > 0 => третья точка правее, иначе - левее
+return (B[0] - A[0]) * (C[1] - B[1]) - (B[1] - A[1]) * (C[0] - B[0]);
+}*/
     }
 }

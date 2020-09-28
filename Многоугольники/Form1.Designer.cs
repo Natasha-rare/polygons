@@ -34,6 +34,9 @@
             this.circleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.squareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.triangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lineColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fillColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,7 +55,8 @@
             this.menuStrip2.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip2.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.shapeToolStripMenuItem});
+            this.shapeToolStripMenuItem,
+            this.optionsToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 0);
             this.menuStrip2.Name = "menuStrip2";
             this.menuStrip2.Size = new System.Drawing.Size(800, 53);
@@ -95,6 +99,29 @@
             this.triangleToolStripMenuItem.Text = "Triangle";
             this.triangleToolStripMenuItem.Click += new System.EventHandler(this.triangleToolStripMenuItem_Click);
             // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lineColorToolStripMenuItem,
+            this.fillColorToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(119, 49);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // lineColorToolStripMenuItem
+            // 
+            this.lineColorToolStripMenuItem.Name = "lineColorToolStripMenuItem";
+            this.lineColorToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.lineColorToolStripMenuItem.Text = "Line color";
+            this.lineColorToolStripMenuItem.Click += new System.EventHandler(this.lineColorToolStripMenuItem_Click);
+            // 
+            // fillColorToolStripMenuItem
+            // 
+            this.fillColorToolStripMenuItem.Name = "fillColorToolStripMenuItem";
+            this.fillColorToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.fillColorToolStripMenuItem.Text = "Fill color";
+            this.fillColorToolStripMenuItem.Click += new System.EventHandler(this.fillColorToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -125,6 +152,9 @@
         private System.Windows.Forms.ToolStripMenuItem circleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem squareToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem triangleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lineColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fillColorToolStripMenuItem;
     }
 }
 
