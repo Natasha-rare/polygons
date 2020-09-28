@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace Многоугольники
 {
+    
+        
+
     abstract class Shape
     {
         public static int R;
-        public int x, y, d_x, d_y;
+        protected int x, y, d_x, d_y;
         public static Color lineC, fillC;
         public bool is_checked = false;
 
@@ -21,6 +24,29 @@ namespace Многоугольники
             R = 30;
             lineC = Color.Black;
             fillC = Color.LightPink;
+        }
+
+        public int X
+        {
+            get { return this.x; }
+            set { this.x = value; }
+        }
+        public int Y
+        {
+            get { return this.y; }
+            set { this.y = value; }
+        }
+
+        public int D_X
+        {
+            get { return this.d_x; }
+            set { this.d_x = value; }
+        }
+
+        public int D_Y
+        {
+            get { return this.d_y; }
+            set { this.d_y = value; }
         }
 
         public abstract void Draw(Graphics e);

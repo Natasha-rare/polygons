@@ -53,8 +53,8 @@ namespace Многоугольники
                 foreach (Shape figure in figures)
                     if (figure.is_checked) 
                     { 
-                        figure.x = e.X - figure.d_x;
-                        figure.y = e.Y - figure.d_y;
+                        figure.X = e.X - figure.D_X;
+                        figure.Y = e.Y - figure.D_Y;
                         // break;
                     }
                 this.Refresh();
@@ -88,8 +88,8 @@ namespace Многоугольники
                     { */
                     flag_checked = true;
                     figure.is_checked = true;
-                    figure.d_x = e.X - figure.x;
-                    figure.d_y = e.Y - figure.y;
+                    figure.D_X = e.X - figure.X;
+                    figure.D_Y = e.Y - figure.Y;
                     
                 }
             }
@@ -129,5 +129,11 @@ namespace Многоугольники
         {
             figure_index = 2;
         }
+        /*
+        public int Rotate(int[] A, int[] B, int[] C)
+        {
+            // > 0 => третья точка правее, иначе - левее
+            return (B[0] - A[0]) * (C[1] - B[1]) - (B[1] - A[1]) * (C[0] - B[0]);
+        }*/
     }
 }
