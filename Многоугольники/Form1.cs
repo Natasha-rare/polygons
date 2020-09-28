@@ -63,22 +63,34 @@ namespace Многоугольники
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Right)
+            {
+                for (int i = 0; i < figures.Count; i++)
+                {
+                    if (figures[i].IsInside(e.X, e.Y))
+                    {
+                        figures.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+            else { 
             foreach (Shape figure in figures)
             {
                 if (figure.IsInside(e.X, e.Y))
                 {
-                    if (e.Button == MouseButtons.Right)  // удаляем фигуру при нажатии на нее правой кнопкой мыши
+                    /*if (e.Button == MouseButtons.Right)  // удаляем фигуру при нажатии на нее правой кнопкой мыши
                     {
                         figures.Remove(figure);
                         break;
                     }
                     else 
-                    { 
-                        flag_checked = true;
-                        figure.is_checked = true;
-                        figure.d_x = e.X - figure.x;
-                        figure.d_y = e.Y - figure.y;
-                    }
+                    { */
+                    flag_checked = true;
+                    figure.is_checked = true;
+                    figure.d_x = e.X - figure.x;
+                    figure.d_y = e.Y - figure.y;
+                    
                 }
             }
             if (!flag_checked)
@@ -94,7 +106,7 @@ namespace Многоугольники
                         figures.Add(new Triangle(e.X, e.Y));
                         break;
                 }
-                
+            }
             this.Invalidate();
         }
 
