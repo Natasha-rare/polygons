@@ -12,7 +12,7 @@ namespace Многоугольники
 {
     public partial class Form1 : Form
     {
-        // Shape[] figures = new Shape[3];
+
         bool flag_checked = false;
         byte figure_index = 0; // 0 - круг 1- квадрат 2-треугольник
         List<Shape> figures = new List<Shape>();
@@ -65,32 +65,26 @@ namespace Многоугольники
         {
             if (e.Button == MouseButtons.Right)
             {
-                for (int i = 0; i < figures.Count; i++)
+                for (int i = figures.Count - 1; i >= 0; i--)
                 {
                     if (figures[i].IsInside(e.X, e.Y))
                     {
                         figures.RemoveAt(i);
-                        i--;
+                        break;
                     }
                 }
             }
-            else { 
-            foreach (Shape figure in figures)
+            else
             {
-                if (figure.IsInside(e.X, e.Y))
+                foreach (Shape figure in figures)
                 {
-                    /*if (e.Button == MouseButtons.Right)  // удаляем фигуру при нажатии на нее правой кнопкой мыши
+                    if (figure.IsInside(e.X, e.Y))
                     {
-                        figures.Remove(figure);
-                        break;
+                        flag_checked = true;
+                        figure.is_checked = true;
+                        figure.D_X = e.X - figure.X;
+                        figure.D_Y = e.Y - figure.Y;
                     }
-                    else 
-                    { */
-                    flag_checked = true;
-                    figure.is_checked = true;
-                    figure.D_X = e.X - figure.X;
-                    figure.D_Y = e.Y - figure.Y;
-                    
                 }
             }
             if (!flag_checked)
@@ -106,7 +100,6 @@ namespace Многоугольники
                         figures.Add(new Triangle(e.X, e.Y));
                         break;
                 }
-            }
             this.Invalidate();
         }
 
@@ -159,11 +152,5 @@ namespace Многоугольники
             if (MyDialog.ShowDialog() == DialogResult.OK)
                 Shape.fillC = MyDialog.Color;
         }
-        /*
-public int Rotate(int[] A, int[] B, int[] C)
-{
-// > 0 => третья точка правее, иначе - левее
-return (B[0] - A[0]) * (C[1] - B[1]) - (B[1] - A[1]) * (C[0] - B[0]);
-}*/
     }
 }
