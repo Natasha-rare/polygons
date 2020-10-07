@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace Многоугольники
 {
@@ -29,6 +30,21 @@ namespace Многоугольники
             {
                 figure.is_checked = false;
             }
+
+            if (figures.Count > 3)
+            {
+                // Simple_Algorithm(figures);
+                for (int i = 0; i < figures.Count; i++)
+                {
+                    if (!figures[i].is_polygon)
+                    {
+                        figures.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+            this.Invalidate();
+            this.Refresh();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -44,6 +60,8 @@ namespace Многоугольники
             {
                 figure.Draw(g);
             }
+            if (figures.Count >=3)
+                Simple_Algorithm(figures, g);
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -58,6 +76,7 @@ namespace Многоугольники
                         // break;
                     }
                 this.Refresh();
+                this.Invalidate();
             }
         }
 
@@ -100,6 +119,7 @@ namespace Многоугольники
                         figures.Add(new Triangle(e.X, e.Y));
                         break;
                 }
+            this.Refresh();
             this.Invalidate();
         }
 
@@ -151,6 +171,64 @@ namespace Многоугольники
             // Update the text box color if the user clicks OK 
             if (MyDialog.ShowDialog() == DialogResult.OK)
                 Shape.fillC = MyDialog.Color;
+        }
+
+        private void Simple_Algorithm(List <Shape> shapes, Graphics g)
+        {
+            foreach (Shape shape in shapes)
+            {
+                shape.is_polygon = false;
+            }
+
+            for (int i = 0; i < shapes.Count; i++)
+                for (int j = i + 1; j < shapes.Count; j++)
+                {
+                    int count_less = 0;
+                    int count_more = 0;
+                    if (shapes[j].X - shapes[i].X == 0)
+                    {
+                        for (int n = 0; n < shapes.Count; n++)
+                        {
+                            if (i != n && j != n)
+                            {
+                                if (shapes[n].X <= shapes[i].X)
+                                {
+                                    count_less++;
+                                }
+                                else { count_more++; }
+                            }
+                        }
+                        if (count_more == 0 || count_less == 0)
+                        {
+                            shapes[i].is_polygon = true;
+                            shapes[j].is_polygon = true;
+                            g.DrawLine(new Pen(Color.Black), shapes[i].X, shapes[i].Y, shapes[j].X, shapes[j].Y);
+                            // break;
+                        }
+                    }
+                    else {
+                        int k = (shapes[i].Y - shapes[j].Y) / (shapes[i].X - shapes[j].X);
+                        int b = shapes[j].Y - k * shapes[j].X;
+                        for (int n = 0; n < shapes.Count; n++)
+                        {
+                            if (i != n && j != n)
+                            {
+                                if (shapes[n].Y < shapes[n].X * k + b)
+                                {
+                                    count_less++;
+                                }
+                                else { count_more++; }
+                            }
+                        }
+                        if (count_more == 0 || count_less == 0)
+                        {
+                            shapes[i].is_polygon = true;
+                            shapes[j].is_polygon = true;
+                            g.DrawLine(new Pen(Color.Black), shapes[i].X, shapes[i].Y, shapes[j].X, shapes[j].Y);
+                            // break;                        
+                        }
+                    }
+                }
         }
     }
 }

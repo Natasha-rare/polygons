@@ -7,21 +7,19 @@ using System.Threading.Tasks;
 
 namespace Многоугольники
 {
-    
-        
-
     abstract class Shape
     {
         public static int R;
         protected int x, y, d_x, d_y;
         public static Color lineC, fillC;
         public bool is_checked = false;
+        public bool is_polygon = false;
 
         public Shape(int x, int y) { this.x = x; this.y = y; }
 
         static Shape()
         {
-            R = 30;
+            R = 20;
             lineC = Color.Black;
             fillC = Color.LightPink;
         }
