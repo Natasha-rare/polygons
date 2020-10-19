@@ -230,5 +230,12 @@ namespace Многоугольники
                     }
                 }
         }
+
+        private void radiusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Radius Form_Radius = new Radius();
+            Form_Radius.Show();
+        }
+
     }
 }

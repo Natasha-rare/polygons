@@ -8,3 +8,4 @@ C:\Users\nattt\coding\polygons\Многоугольники\obj\Debug\Много
 C:\Users\nattt\coding\polygons\Многоугольники\obj\Debug\Многоугольники.csproj.CoreCompileInputs.cache
 C:\Users\nattt\coding\polygons\Многоугольники\obj\Debug\Многоугольники.exe
 C:\Users\nattt\coding\polygons\Многоугольники\obj\Debug\Многоугольники.pdb
+C:\Users\nattt\coding\polygons\Многоугольники\obj\Debug\Многоугольники.Radius.resources
