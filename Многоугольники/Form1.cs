@@ -33,7 +33,6 @@ namespace Многоугольники
 
             if (figures.Count > 3)
             {
-                // Simple_Algorithm(figures);
                 for (int i = 0; i < figures.Count; i++)
                 {
                     if (!figures[i].is_polygon)
@@ -43,7 +42,6 @@ namespace Многоугольники
                     }
                 }
             }
-            this.Invalidate();
             this.Refresh();
         }
 
@@ -56,12 +54,71 @@ namespace Многоугольники
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+            
+            if (figures.Count >= 3)
+            {
+                foreach (Shape shape in figures)
+                {
+                    shape.is_polygon = false;
+                }
+
+                for (int i = 0; i < figures.Count; i++)
+                    for (int j = i + 1; j < figures.Count; j++)
+                    {
+                        bool count_less = false;
+                        bool count_more = false;
+                        if (figures[i].X == figures[j].X)
+                        {
+                            for (int n = 0; n < figures.Count; n++)
+                            {
+                                if (n != i && n != j)
+                                {
+                                    if (figures[n].X <= figures[i].X)
+                                    {
+                                        count_less = true;
+                                    }
+                                    else { count_more = true; }
+                                }
+                            }
+                            if (count_more != count_less)
+                            {
+                                figures[i].is_polygon = true;
+                                figures[j].is_polygon = true;
+                                g.DrawLine(new Pen(Color.Black), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
+                                // break;
+                            }
+                        }
+                        else
+                        {
+                            double k = (figures[i].Y - figures[j].Y + .0) / (figures[i].X - figures[j].X + .0);
+                            double b = figures[i].Y - (k * figures[i].X);
+                            for (int n = 0; n < figures.Count; n++)
+                            {
+                                if (i != n && j != n)
+                                {
+                                    if (figures[n].Y <= (figures[n].X * k + b))
+                                    { 
+                                        count_less = true;
+                                    }
+                                    else { count_more = true; }
+                                }
+                            }
+                            if (count_more != count_less)
+                            {
+                                figures[i].is_polygon = true;
+                                figures[j].is_polygon = true;
+                                g.DrawLine(new Pen(Color.Black), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
+                                // break;                        
+                            }
+                        }
+                    }
+                }
+
             foreach (Shape figure in figures)
             {
                 figure.Draw(g);
             }
-            if (figures.Count >=3)
-                Simple_Algorithm(figures, g);
+
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -76,7 +133,6 @@ namespace Многоугольники
                         // break;
                     }
                 this.Refresh();
-                this.Invalidate();
             }
         }
 
@@ -120,7 +176,6 @@ namespace Многоугольники
                         break;
                 }
             this.Refresh();
-            this.Invalidate();
         }
 
         private void shapeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -173,63 +228,6 @@ namespace Многоугольники
                 Shape.fillC = MyDialog.Color;
         }
 
-        private void Simple_Algorithm(List <Shape> shapes, Graphics g)
-        {
-            foreach (Shape shape in shapes)
-            {
-                shape.is_polygon = false;
-            }
-
-            for (int i = 0; i < shapes.Count; i++)
-                for (int j = i + 1; j < shapes.Count; j++)
-                {
-                    int count_less = 0;
-                    int count_more = 0;
-                    if (shapes[j].X - shapes[i].X == 0)
-                    {
-                        for (int n = 0; n < shapes.Count; n++)
-                        {
-                            if (i != n && j != n)
-                            {
-                                if (shapes[n].X <= shapes[i].X)
-                                {
-                                    count_less++;
-                                }
-                                else { count_more++; }
-                            }
-                        }
-                        if (count_more == 0 || count_less == 0)
-                        {
-                            shapes[i].is_polygon = true;
-                            shapes[j].is_polygon = true;
-                            g.DrawLine(new Pen(Color.Black), shapes[i].X, shapes[i].Y, shapes[j].X, shapes[j].Y);
-                            // break;
-                        }
-                    }
-                    else {
-                        int k = (shapes[i].Y - shapes[j].Y) / (shapes[i].X - shapes[j].X);
-                        int b = shapes[j].Y - k * shapes[j].X;
-                        for (int n = 0; n < shapes.Count; n++)
-                        {
-                            if (i != n && j != n)
-                            {
-                                if (shapes[n].Y < shapes[n].X * k + b)
-                                {
-                                    count_less++;
-                                }
-                                else { count_more++; }
-                            }
-                        }
-                        if (count_more == 0 || count_less == 0)
-                        {
-                            shapes[i].is_polygon = true;
-                            shapes[j].is_polygon = true;
-                            g.DrawLine(new Pen(Color.Black), shapes[i].X, shapes[i].Y, shapes[j].X, shapes[j].Y);
-                            // break;                        
-                        }
-                    }
-                }
-        }
 
         private void radiusToolStripMenuItem_Click(object sender, EventArgs e)
         {
