@@ -176,21 +176,21 @@ namespace Многоугольники
                         figure.D_Y = e.Y - figure.Y;
                     }
                 }
+                if (!flag_checked)
+                    switch (figure_index)
+                    {
+                        case 0:
+                            figures.Add(new Circle(e.X, e.Y));
+                            break;
+                        case 1:
+                            figures.Add(new Square(e.X, e.Y));
+                            break;
+                        case 2:
+                            figures.Add(new Triangle(e.X, e.Y));
+                            break;
+                    }
             }
 
-            if (!flag_checked)
-                switch (figure_index)
-                {
-                    case 0:
-                        figures.Add(new Circle(e.X, e.Y));
-                        break;
-                    case 1:
-                        figures.Add(new Square(e.X, e.Y));
-                        break;
-                    case 2:
-                        figures.Add(new Triangle(e.X, e.Y));
-                        break;
-                }
             Refresh();
         }
 
