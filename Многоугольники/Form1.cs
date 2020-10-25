@@ -17,6 +17,7 @@ namespace Многоугольники
         bool flag_checked = false;
         byte figure_index = 0; // 0 - круг 1- квадрат 2-треугольник
         List<Shape> figures = new List<Shape>();
+        byte algorithm = 0; // 0 - simple, 1 - deighrsta
 
         public Form1()
         {
@@ -57,68 +58,82 @@ namespace Многоугольники
             
             if (figures.Count >= 3)
             {
-                foreach (Shape shape in figures)
-                {
-                    shape.is_polygon = false;
-                }
-
-                for (int i = 0; i < figures.Count; i++)
-                    for (int j = i + 1; j < figures.Count; j++)
-                    {
-                        bool count_less = false;
-                        bool count_more = false;
-                        if (figures[i].X == figures[j].X)
-                        {
-                            for (int n = 0; n < figures.Count; n++)
-                            {
-                                if (n != i && n != j)
-                                {
-                                    if (figures[n].X <= figures[i].X)
-                                    {
-                                        count_less = true;
-                                    }
-                                    else { count_more = true; }
-                                }
-                            }
-                            if (count_more != count_less)
-                            {
-                                figures[i].is_polygon = true;
-                                figures[j].is_polygon = true;
-                                g.DrawLine(new Pen(Color.Black), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
-                                // break;
-                            }
-                        }
-                        else
-                        {
-                            double k = (figures[i].Y - figures[j].Y + .0) / (figures[i].X - figures[j].X + .0);
-                            double b = figures[i].Y - (k * figures[i].X);
-                            for (int n = 0; n < figures.Count; n++)
-                            {
-                                if (i != n && j != n)
-                                {
-                                    if (figures[n].Y <= (figures[n].X * k + b))
-                                    { 
-                                        count_less = true;
-                                    }
-                                    else { count_more = true; }
-                                }
-                            }
-                            if (count_more != count_less)
-                            {
-                                figures[i].is_polygon = true;
-                                figures[j].is_polygon = true;
-                                g.DrawLine(new Pen(Color.Black), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
-                                // break;                        
-                            }
-                        }
-                    }
-                }
+                if (algorithm == 0)
+                    Simple_Algorithm(figures, g);
+                else
+                    Deighrsta_Algorithm(figures, g);
+            }
 
             foreach (Shape figure in figures)
             {
                 figure.Draw(g);
             }
 
+        }
+
+
+        private void Deighrsta_Algorithm(List<Shape> figures, Graphics g)
+        {
+            
+        }
+
+        private void Simple_Algorithm(List<Shape> figures, Graphics g)
+        {
+            foreach (Shape shape in figures)
+            {
+                shape.is_polygon = false;
+            }
+
+            for (int i = 0; i < figures.Count; i++)
+                for (int j = i + 1; j < figures.Count; j++)
+                {
+                    bool count_less = false;
+                    bool count_more = false;
+                    if (figures[i].X == figures[j].X)
+                    {
+                        for (int n = 0; n < figures.Count; n++)
+                        {
+                            if (n != i && n != j)
+                            {
+                                if (figures[n].X <= figures[i].X)
+                                {
+                                    count_less = true;
+                                }
+                                else { count_more = true; }
+                            }
+                        }
+                        if (count_more != count_less)
+                        {
+                            figures[i].is_polygon = true;
+                            figures[j].is_polygon = true;
+                            g.DrawLine(new Pen(Shape.lineC), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
+                            // break;
+                        }
+                    }
+                    else
+                    {
+                        double k = (figures[i].Y - figures[j].Y + .0) / (figures[i].X - figures[j].X + .0);
+                        double b = figures[i].Y - (k * figures[i].X);
+                        for (int n = 0; n < figures.Count; n++)
+                        {
+                            if (i != n && j != n)
+                            {
+                                if (figures[n].Y <= (figures[n].X * k + b))
+                                {
+                                    count_less = true;
+                                }
+                                else { count_more = true; }
+                            }
+                        }
+                        if (count_more != count_less)
+                        {
+                            figures[i].is_polygon = true;
+                            figures[j].is_polygon = true;
+                            g.DrawLine(new Pen(Shape.lineC), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
+                            // break;                        
+                        }
+                    }
+                }
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -178,11 +193,6 @@ namespace Многоугольники
             this.Refresh();
         }
 
-        private void shapeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void circleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             figure_index = 0;
@@ -211,6 +221,7 @@ namespace Многоугольники
             // Update the text box color if the user clicks OK 
             if (MyDialog.ShowDialog() == DialogResult.OK)
                 Shape.lineC = MyDialog.Color;
+            this.Refresh();
         }
 
         private void fillColorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -224,8 +235,9 @@ namespace Многоугольники
             MyDialog.Color = Shape.fillC;
 
             // Update the text box color if the user clicks OK 
-            if (MyDialog.ShowDialog() == DialogResult.OK)
+            if (MyDialog.ShowDialog() == DialogResult.OK) 
                 Shape.fillC = MyDialog.Color;
+            this.Refresh();
         }
 
 
@@ -235,5 +247,14 @@ namespace Многоугольники
             Form_Radius.Show();
         }
 
+        private void deighrstaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            algorithm = 1;
+        }
+
+        private void simpleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            algorithm = 0;
+        }
     }
 }

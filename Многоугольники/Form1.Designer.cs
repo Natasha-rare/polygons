@@ -38,12 +38,14 @@
             this.lineColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fillColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.radiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.algorithmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.simpleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deighrstaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip1.Location = new System.Drawing.Point(0, 53);
             this.menuStrip1.Name = "menuStrip1";
@@ -57,7 +59,8 @@
             this.menuStrip2.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.shapeToolStripMenuItem,
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.algorithmToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 0);
             this.menuStrip2.Name = "menuStrip2";
             this.menuStrip2.Size = new System.Drawing.Size(800, 53);
@@ -70,11 +73,10 @@
             this.circleToolStripMenuItem,
             this.squareToolStripMenuItem,
             this.triangleToolStripMenuItem});
-            this.shapeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.shapeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.shapeToolStripMenuItem.Name = "shapeToolStripMenuItem";
-            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(129, 49);
+            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(127, 49);
             this.shapeToolStripMenuItem.Text = "Shape";
-            this.shapeToolStripMenuItem.Click += new System.EventHandler(this.shapeToolStripMenuItem_Click);
             // 
             // circleToolStripMenuItem
             // 
@@ -106,8 +108,10 @@
             this.lineColorToolStripMenuItem,
             this.fillColorToolStripMenuItem,
             this.radiusToolStripMenuItem});
+            this.optionsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.optionsToolStripMenuItem.ForeColor = System.Drawing.Color.DarkBlue;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(119, 49);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(153, 49);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // lineColorToolStripMenuItem
@@ -130,6 +134,31 @@
             this.radiusToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
             this.radiusToolStripMenuItem.Text = "Radius";
             this.radiusToolStripMenuItem.Click += new System.EventHandler(this.radiusToolStripMenuItem_Click);
+            // 
+            // algorithmToolStripMenuItem
+            // 
+            this.algorithmToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.simpleToolStripMenuItem,
+            this.deighrstaToolStripMenuItem});
+            this.algorithmToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.algorithmToolStripMenuItem.ForeColor = System.Drawing.Color.DarkGreen;
+            this.algorithmToolStripMenuItem.Name = "algorithmToolStripMenuItem";
+            this.algorithmToolStripMenuItem.Size = new System.Drawing.Size(183, 49);
+            this.algorithmToolStripMenuItem.Text = "Algorithm";
+            // 
+            // simpleToolStripMenuItem
+            // 
+            this.simpleToolStripMenuItem.Name = "simpleToolStripMenuItem";
+            this.simpleToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
+            this.simpleToolStripMenuItem.Text = "Simple";
+            this.simpleToolStripMenuItem.Click += new System.EventHandler(this.simpleToolStripMenuItem_Click);
+            // 
+            // deighrstaToolStripMenuItem
+            // 
+            this.deighrstaToolStripMenuItem.Name = "deighrstaToolStripMenuItem";
+            this.deighrstaToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.deighrstaToolStripMenuItem.Text = "Dijkstra ";
+            this.deighrstaToolStripMenuItem.Click += new System.EventHandler(this.deighrstaToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -165,6 +194,9 @@
         private System.Windows.Forms.ToolStripMenuItem lineColorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fillColorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem radiusToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem algorithmToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem simpleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deighrstaToolStripMenuItem;
     }
 }
 
