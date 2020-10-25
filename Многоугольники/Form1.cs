@@ -177,6 +177,7 @@ namespace Многоугольники
                     }
                 }
             }
+
             if (!flag_checked)
                 switch (figure_index)
                 {
@@ -190,7 +191,7 @@ namespace Многоугольники
                         figures.Add(new Triangle(e.X, e.Y));
                         break;
                 }
-            this.Refresh();
+            Refresh();
         }
 
         private void circleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -255,6 +256,12 @@ namespace Многоугольники
         private void simpleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             algorithm = 0;
+        }
+
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        {
+            Form1_MouseDown(sender, e);
+            Refresh();
         }
     }
 }

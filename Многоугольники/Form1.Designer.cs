@@ -46,6 +46,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip1.Location = new System.Drawing.Point(0, 53);
             this.menuStrip1.Name = "menuStrip1";
@@ -117,21 +118,21 @@
             // lineColorToolStripMenuItem
             // 
             this.lineColorToolStripMenuItem.Name = "lineColorToolStripMenuItem";
-            this.lineColorToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.lineColorToolStripMenuItem.Size = new System.Drawing.Size(298, 54);
             this.lineColorToolStripMenuItem.Text = "Line color";
             this.lineColorToolStripMenuItem.Click += new System.EventHandler(this.lineColorToolStripMenuItem_Click);
             // 
             // fillColorToolStripMenuItem
             // 
             this.fillColorToolStripMenuItem.Name = "fillColorToolStripMenuItem";
-            this.fillColorToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.fillColorToolStripMenuItem.Size = new System.Drawing.Size(298, 54);
             this.fillColorToolStripMenuItem.Text = "Fill color";
             this.fillColorToolStripMenuItem.Click += new System.EventHandler(this.fillColorToolStripMenuItem_Click);
             // 
             // radiusToolStripMenuItem
             // 
             this.radiusToolStripMenuItem.Name = "radiusToolStripMenuItem";
-            this.radiusToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.radiusToolStripMenuItem.Size = new System.Drawing.Size(298, 54);
             this.radiusToolStripMenuItem.Text = "Radius";
             this.radiusToolStripMenuItem.Click += new System.EventHandler(this.radiusToolStripMenuItem_Click);
             // 
@@ -149,14 +150,14 @@
             // simpleToolStripMenuItem
             // 
             this.simpleToolStripMenuItem.Name = "simpleToolStripMenuItem";
-            this.simpleToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
+            this.simpleToolStripMenuItem.Size = new System.Drawing.Size(274, 54);
             this.simpleToolStripMenuItem.Text = "Simple";
             this.simpleToolStripMenuItem.Click += new System.EventHandler(this.simpleToolStripMenuItem_Click);
             // 
             // deighrstaToolStripMenuItem
             // 
             this.deighrstaToolStripMenuItem.Name = "deighrstaToolStripMenuItem";
-            this.deighrstaToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.deighrstaToolStripMenuItem.Size = new System.Drawing.Size(274, 54);
             this.deighrstaToolStripMenuItem.Text = "Dijkstra ";
             this.deighrstaToolStripMenuItem.Click += new System.EventHandler(this.deighrstaToolStripMenuItem_Click);
             // 
@@ -172,6 +173,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
