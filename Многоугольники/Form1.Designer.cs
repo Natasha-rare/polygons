@@ -40,7 +40,7 @@
             this.radiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.algorithmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.simpleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deighrstaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.djarvisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -140,7 +140,7 @@
             // 
             this.algorithmToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.simpleToolStripMenuItem,
-            this.deighrstaToolStripMenuItem});
+            this.djarvisToolStripMenuItem});
             this.algorithmToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.algorithmToolStripMenuItem.ForeColor = System.Drawing.Color.DarkGreen;
             this.algorithmToolStripMenuItem.Name = "algorithmToolStripMenuItem";
@@ -150,16 +150,16 @@
             // simpleToolStripMenuItem
             // 
             this.simpleToolStripMenuItem.Name = "simpleToolStripMenuItem";
-            this.simpleToolStripMenuItem.Size = new System.Drawing.Size(274, 54);
+            this.simpleToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
             this.simpleToolStripMenuItem.Text = "Simple";
             this.simpleToolStripMenuItem.Click += new System.EventHandler(this.simpleToolStripMenuItem_Click);
             // 
-            // deighrstaToolStripMenuItem
+            // djarvisToolStripMenuItem
             // 
-            this.deighrstaToolStripMenuItem.Name = "deighrstaToolStripMenuItem";
-            this.deighrstaToolStripMenuItem.Size = new System.Drawing.Size(274, 54);
-            this.deighrstaToolStripMenuItem.Text = "Dijkstra ";
-            this.deighrstaToolStripMenuItem.Click += new System.EventHandler(this.deighrstaToolStripMenuItem_Click);
+            this.djarvisToolStripMenuItem.Name = "djarvisToolStripMenuItem";
+            this.djarvisToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
+            this.djarvisToolStripMenuItem.Text = "Djarvis";
+            this.djarvisToolStripMenuItem.Click += new System.EventHandler(this.djarvisToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -198,7 +198,7 @@
         private System.Windows.Forms.ToolStripMenuItem radiusToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem algorithmToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem simpleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deighrstaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem djarvisToolStripMenuItem;
     }
 }
 

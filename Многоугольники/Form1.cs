@@ -61,7 +61,7 @@ namespace Многоугольники
                 if (algorithm == 0)
                     Simple_Algorithm(figures, g);
                 else
-                    Deighrsta_Algorithm(figures, g);
+                    Djarvis(figures, g);
             }
 
             foreach (Shape figure in figures)
@@ -72,9 +72,42 @@ namespace Многоугольники
         }
 
 
-        private void Deighrsta_Algorithm(List<Shape> figures, Graphics g)
+        private void Djarvis(List<Shape> figures, Graphics g)
         {
+            // 1 самая нижняя (левая)
+            Shape A = figures[0];
+            foreach (Shape shape in figures)
+            {
+                shape.is_polygon = true;
+                if (shape.Y > A.Y)
+                    A = shape;
+                else if (shape.Y == A.Y)
+                {
+                    if (shape.X < A.X) A = shape;
+                }
+            }
             
+            // 2 точка на прямой параллельной Ох
+            Point F = new Point();
+            F.X = A.X - 10;
+            F.Y = A.Y;
+
+            Point d = new Point(F.X - A.X, F.Y - A.Y);
+            double max = 0;
+            Shape selected = figures[0];
+            // 3
+            /*foreach (Shape shape in figures)
+            {
+                Point d1 = new Point(shape.X - A.X, shape.Y - A.Y);
+                double cos = (d.X * d1.X + d.Y * d1.Y) / (Math.Sqrt(d.X * d.X + d.Y * d.Y) *
+                    Math.Sqrt(d1.X * d1.X + d1.Y * d1.Y));
+                if (cos > max)
+                {
+                    max = cos;
+                    selected = shape;
+                }
+            }
+            Console.WriteLine(selected.X);*/
         }
 
         private void Simple_Algorithm(List<Shape> figures, Graphics g)
@@ -248,10 +281,6 @@ namespace Многоугольники
             Form_Radius.Show();
         }
 
-        private void deighrstaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            algorithm = 1;
-        }
 
         private void simpleToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -262,6 +291,11 @@ namespace Многоугольники
         {
             Form1_MouseDown(sender, e);
             Refresh();
+        }
+
+        private void djarvisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            algorithm = 1;
         }
     }
 }
