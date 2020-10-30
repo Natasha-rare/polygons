@@ -118,21 +118,21 @@
             // lineColorToolStripMenuItem
             // 
             this.lineColorToolStripMenuItem.Name = "lineColorToolStripMenuItem";
-            this.lineColorToolStripMenuItem.Size = new System.Drawing.Size(298, 54);
+            this.lineColorToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
             this.lineColorToolStripMenuItem.Text = "Line color";
             this.lineColorToolStripMenuItem.Click += new System.EventHandler(this.lineColorToolStripMenuItem_Click);
             // 
             // fillColorToolStripMenuItem
             // 
             this.fillColorToolStripMenuItem.Name = "fillColorToolStripMenuItem";
-            this.fillColorToolStripMenuItem.Size = new System.Drawing.Size(298, 54);
+            this.fillColorToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
             this.fillColorToolStripMenuItem.Text = "Fill color";
             this.fillColorToolStripMenuItem.Click += new System.EventHandler(this.fillColorToolStripMenuItem_Click);
             // 
             // radiusToolStripMenuItem
             // 
             this.radiusToolStripMenuItem.Name = "radiusToolStripMenuItem";
-            this.radiusToolStripMenuItem.Size = new System.Drawing.Size(298, 54);
+            this.radiusToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
             this.radiusToolStripMenuItem.Text = "Radius";
             this.radiusToolStripMenuItem.Click += new System.EventHandler(this.radiusToolStripMenuItem_Click);
             // 
@@ -149,6 +149,9 @@
             // 
             // simpleToolStripMenuItem
             // 
+            this.simpleToolStripMenuItem.Checked = true;
+            this.simpleToolStripMenuItem.CheckOnClick = true;
+            this.simpleToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.simpleToolStripMenuItem.Name = "simpleToolStripMenuItem";
             this.simpleToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
             this.simpleToolStripMenuItem.Text = "Simple";
@@ -156,6 +159,7 @@
             // 
             // djarvisToolStripMenuItem
             // 
+            this.djarvisToolStripMenuItem.CheckOnClick = true;
             this.djarvisToolStripMenuItem.Name = "djarvisToolStripMenuItem";
             this.djarvisToolStripMenuItem.Size = new System.Drawing.Size(359, 54);
             this.djarvisToolStripMenuItem.Text = "Djarvis";

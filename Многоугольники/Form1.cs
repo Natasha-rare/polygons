@@ -74,12 +74,16 @@ namespace Многоугольники
 
         private void Djarvis(List<Shape> figures, Graphics g)
         {
+            foreach(Shape figure in figures)
+            {
+                figure.is_polygon = false;
+            }
             List<Shape> polygon = new List<Shape>();
+            polygon.Clear();
             // 1 самая нижняя (левая)
             Shape A = figures[0];
             foreach (Shape shape in figures)
             {
-                shape.is_polygon = true;
                 if (shape.Y > A.Y)
                     A = shape;
                 else if (shape.Y == A.Y)
@@ -88,35 +92,18 @@ namespace Многоугольники
                 }
             }
             polygon.Add(A);
-            // 2 точка на прямой параллельной Ох
-            Shape M = new Triangle(A.X - 100, A.Y);
-            //M.Draw(g);
+
+            //Shape M;
             do { 
-            Point d = new Point(M.X - A.X, M.Y - A.Y);
-            double max = -100;
-            Shape P = figures[0];
-            // 3
-            
-                foreach (Shape shape in figures)
+                Shape P = figures[0];
+                for (int i = 1; i < figures.Count; i++)
                 {
-                    Point d1 = new Point(shape.X - A.X, shape.Y - A.Y);
-                    double cos = (d.X * d1.X + d.Y * d1.Y) / (Math.Sqrt(d.X * d.X + d.Y * d.Y) *
-                        Math.Sqrt(d1.X * d1.X + d1.Y * d1.Y));
-                    if (cos < max && shape != A)
+                    if (P == A || ((P.X - A.X) * (figures[i].Y - A.Y) - (figures[i].X - A.X) * (P.Y - A.Y)) > 0)
                     {
-                        max = cos;
-                        P = shape;
-                        Console.WriteLine(max);
-                    }
-                    else if (cos < max && shape != A && P.Y < shape.Y)
-                    {
-                        max = cos;
-                        P = shape;
-                        Console.WriteLine(max);
+                        P = figures[i];
                     }
                 }
                 polygon.Add(P);
-                M = A;
                 A = P;
             } while (polygon[0] != polygon[polygon.Count - 1]);
 
@@ -296,6 +283,8 @@ namespace Многоугольники
         private void simpleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             algorithm = 0;
+            simpleToolStripMenuItem.Checked = true;
+            djarvisToolStripMenuItem.Checked = false;
         }
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
@@ -307,6 +296,8 @@ namespace Многоугольники
         private void djarvisToolStripMenuItem_Click(object sender, EventArgs e)
         {
             algorithm = 1;
+            djarvisToolStripMenuItem.Checked = true;
+            simpleToolStripMenuItem.Checked = false;
         }
     }
 }
