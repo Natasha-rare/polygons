@@ -27,6 +27,7 @@ namespace Многоугольники
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
             flag_checked = !flag_checked;
+
             foreach (Shape figure in figures)
             {
                 figure.is_checked = false;
@@ -93,7 +94,6 @@ namespace Многоугольники
             }
             polygon.Add(A);
 
-            //Shape M;
             do { 
                 Shape P = figures[0];
                 for (int i = 1; i < figures.Count; i++)
@@ -106,6 +106,13 @@ namespace Многоугольники
                 polygon.Add(P);
                 A = P;
             } while (polygon[0] != polygon[polygon.Count - 1]);
+
+            Point[] points = new Point[polygon.Count - 1];
+            for (int i = 0; i < polygon.Count - 1; i++)
+            {
+                points[i] = new Point(polygon[i].X, polygon[i].Y);
+            }
+            g.FillPolygon(new SolidBrush(Color.LightGoldenrodYellow), points);
 
             for (int i = 0; i < polygon.Count - 1; i++)
             {
@@ -168,7 +175,6 @@ namespace Многоугольники
                             figures[i].is_polygon = true;
                             figures[j].is_polygon = true;
                             g.DrawLine(new Pen(Shape.lineC), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
-                            // break;                        
                         }
                     }
                 }
