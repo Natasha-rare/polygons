@@ -74,6 +74,7 @@ namespace Многоугольники
 
         private void Djarvis(List<Shape> figures, Graphics g)
         {
+            List<Shape> polygon = new List<Shape>();
             // 1 самая нижняя (левая)
             Shape A = figures[0];
             foreach (Shape shape in figures)
@@ -86,28 +87,45 @@ namespace Многоугольники
                     if (shape.X < A.X) A = shape;
                 }
             }
-            
+            polygon.Add(A);
             // 2 точка на прямой параллельной Ох
-            Point F = new Point();
-            F.X = A.X - 10;
-            F.Y = A.Y;
-
-            Point d = new Point(F.X - A.X, F.Y - A.Y);
-            double max = 0;
-            Shape selected = figures[0];
+            Shape M = new Triangle(A.X - 100, A.Y);
+            //M.Draw(g);
+            do { 
+            Point d = new Point(M.X - A.X, M.Y - A.Y);
+            double max = -100;
+            Shape P = figures[0];
             // 3
-            /*foreach (Shape shape in figures)
-            {
-                Point d1 = new Point(shape.X - A.X, shape.Y - A.Y);
-                double cos = (d.X * d1.X + d.Y * d1.Y) / (Math.Sqrt(d.X * d.X + d.Y * d.Y) *
-                    Math.Sqrt(d1.X * d1.X + d1.Y * d1.Y));
-                if (cos > max)
+            
+                foreach (Shape shape in figures)
                 {
-                    max = cos;
-                    selected = shape;
+                    Point d1 = new Point(shape.X - A.X, shape.Y - A.Y);
+                    double cos = (d.X * d1.X + d.Y * d1.Y) / (Math.Sqrt(d.X * d.X + d.Y * d.Y) *
+                        Math.Sqrt(d1.X * d1.X + d1.Y * d1.Y));
+                    if (cos < max && shape != A)
+                    {
+                        max = cos;
+                        P = shape;
+                        Console.WriteLine(max);
+                    }
+                    else if (cos < max && shape != A && P.Y < shape.Y)
+                    {
+                        max = cos;
+                        P = shape;
+                        Console.WriteLine(max);
+                    }
                 }
+                polygon.Add(P);
+                M = A;
+                A = P;
+            } while (polygon[0] != polygon[polygon.Count - 1]);
+
+            for (int i = 0; i < polygon.Count - 1; i++)
+            {
+                polygon[i].is_polygon = true;
+                polygon[i + 1].is_polygon = true;
+                g.DrawLine(new Pen(Shape.lineC), polygon[i].X, polygon[i].Y, polygon[i + 1].X, polygon[i + 1].Y);
             }
-            Console.WriteLine(selected.X);*/
         }
 
         private void Simple_Algorithm(List<Shape> figures, Graphics g)
@@ -186,44 +204,37 @@ namespace Многоугольники
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            for (int i = figures.Count - 1; i >= 0; i--)
             {
-                for (int i = figures.Count - 1; i >= 0; i--)
+                if (figures[i].IsInside(e.X, e.Y))
                 {
-                    if (figures[i].IsInside(e.X, e.Y))
+                    if (e.Button == MouseButtons.Right)
                     {
                         figures.RemoveAt(i);
                         break;
                     }
-                }
-            }
-            else
-            {
-                foreach (Shape figure in figures)
-                {
-                    if (figure.IsInside(e.X, e.Y))
+                    else
                     {
                         flag_checked = true;
-                        figure.is_checked = true;
-                        figure.D_X = e.X - figure.X;
-                        figure.D_Y = e.Y - figure.Y;
+                        figures[i].is_checked = true;
+                        figures[i].D_X = e.X - figures[i].X;
+                        figures[i].D_Y = e.Y - figures[i].Y;
                     }
                 }
-                if (!flag_checked)
-                    switch (figure_index)
-                    {
-                        case 0:
-                            figures.Add(new Circle(e.X, e.Y));
-                            break;
-                        case 1:
-                            figures.Add(new Square(e.X, e.Y));
-                            break;
-                        case 2:
-                            figures.Add(new Triangle(e.X, e.Y));
-                            break;
-                    }
             }
-
+            if (!flag_checked && e.Button == MouseButtons.Left)
+                switch (figure_index)
+                {
+                    case 0:
+                        figures.Add(new Circle(e.X, e.Y));
+                        break;
+                    case 1:
+                        figures.Add(new Square(e.X, e.Y));
+                        break;
+                    case 2:
+                        figures.Add(new Triangle(e.X, e.Y));
+                        break;
+                    }
             Refresh();
         }
 
