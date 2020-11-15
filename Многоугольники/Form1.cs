@@ -17,7 +17,7 @@ namespace Многоугольники
         public Form1()
         {
             InitializeComponent();
-            Compareness(90);
+            Compareness(900);
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
@@ -243,188 +243,188 @@ namespace Многоугольники
             }
         }
 
-private void Simple_Algorithm(List<Shape> figures, Graphics g)
-{
-foreach (Shape shape in figures)
-{
-    shape.is_polygon = false;
-}
-
-for (int i = 0; i < figures.Count; i++)
-    for (int j = i + 1; j < figures.Count; j++)
+    private void Simple_Algorithm(List<Shape> figures, Graphics g)
     {
-        bool count_less = false;
-        bool count_more = false;
-        if (figures[i].X == figures[j].X)
+        foreach (Shape shape in figures)
         {
-            for (int n = 0; n < figures.Count; n++)
+            shape.is_polygon = false;
+        }
+
+        for (int i = 0; i < figures.Count; i++)
+            for (int j = i + 1; j < figures.Count; j++)
+        {
+            bool count_less = false;
+            bool count_more = false;
+            if (figures[i].X == figures[j].X)
             {
-                if (n != i && n != j)
+                for (int n = 0; n < figures.Count; n++)
                 {
-                    if (figures[n].X <= figures[i].X)
+                    if (n != i && n != j)
                     {
-                        count_less = true;
+                        if (figures[n].X <= figures[i].X)
+                        {
+                            count_less = true;
+                        }
+                        else { count_more = true; }
                     }
-                    else { count_more = true; }
+                }
+                if (count_more != count_less)
+                {
+                    figures[i].is_polygon = true;
+                    figures[j].is_polygon = true;
+                    g.DrawLine(new Pen(Shape.lineC), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
+                    // break;
                 }
             }
-            if (count_more != count_less)
+            else
             {
-                figures[i].is_polygon = true;
-                figures[j].is_polygon = true;
-                g.DrawLine(new Pen(Shape.lineC), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
-                // break;
-            }
-        }
-        else
-        {
-            double k = (figures[i].Y - figures[j].Y + .0) / (figures[i].X - figures[j].X + .0);
-            double b = figures[i].Y - (k * figures[i].X);
-            for (int n = 0; n < figures.Count; n++)
-            {
-                if (i != n && j != n)
+                double k = (figures[i].Y - figures[j].Y + .0) / (figures[i].X - figures[j].X + .0);
+                double b = figures[i].Y - (k * figures[i].X);
+                for (int n = 0; n < figures.Count; n++)
                 {
-                    if (figures[n].Y <= (figures[n].X * k + b))
+                    if (i != n && j != n)
                     {
-                        count_less = true;
+                        if (figures[n].Y <= (figures[n].X * k + b))
+                        {
+                            count_less = true;
+                        }
+                        else { count_more = true; }
                     }
-                    else { count_more = true; }
+                }
+                if (count_more != count_less)
+                {
+                    figures[i].is_polygon = true;
+                    figures[j].is_polygon = true;
+                    g.DrawLine(new Pen(Shape.lineC), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
                 }
             }
-            if (count_more != count_less)
+        }
+    }
+
+    private void Form1_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (flag_checked)
+        {
+            foreach (Shape figure in figures)
+                if (figure.is_checked)
+                {
+                    figure.X = e.X - figure.D_X;
+                    figure.Y = e.Y - figure.D_Y;
+                    // break;
+                }
+            this.Refresh();
+        }
+    }
+
+    private void Form1_MouseDown(object sender, MouseEventArgs e)
+    {
+            for (int i = figures.Count - 1; i >= 0; i--)
             {
-                figures[i].is_polygon = true;
-                figures[j].is_polygon = true;
-                g.DrawLine(new Pen(Shape.lineC), figures[i].X, figures[i].Y, figures[j].X, figures[j].Y);
+                if (figures[i].IsInside(e.X, e.Y))
+                {
+                    if (e.Button == MouseButtons.Right)
+                    {
+                        figures.RemoveAt(i);
+                        break;
+                    }
+                    else
+                    {
+                        flag_checked = true;
+                        figures[i].is_checked = true;
+                        figures[i].D_X = e.X - figures[i].X;
+                        figures[i].D_Y = e.Y - figures[i].Y;
+                    }
+                }
             }
-        }
+        if (!flag_checked && e.Button == MouseButtons.Left)
+            switch (figure_index)
+            {
+                case 0:
+                    figures.Add(new Circle(e.X, e.Y));
+                    break;
+                case 1:
+                    figures.Add(new Square(e.X, e.Y));
+                    break;
+                case 2:
+                    figures.Add(new Triangle(e.X, e.Y));
+                    break;
+            }
+        Refresh();
     }
-}
 
-private void Form1_MouseMove(object sender, MouseEventArgs e)
-{
-if (flag_checked)
-{
-    foreach (Shape figure in figures)
-        if (figure.is_checked)
-        {
-            figure.X = e.X - figure.D_X;
-            figure.Y = e.Y - figure.D_Y;
-            // break;
-        }
-    this.Refresh();
-}
-}
-
-private void Form1_MouseDown(object sender, MouseEventArgs e)
-{
-for (int i = figures.Count - 1; i >= 0; i--)
-{
-    if (figures[i].IsInside(e.X, e.Y))
+    private void circleToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (e.Button == MouseButtons.Right)
-        {
-            figures.RemoveAt(i);
-            break;
-        }
-        else
-        {
-            flag_checked = true;
-            figures[i].is_checked = true;
-            figures[i].D_X = e.X - figures[i].X;
-            figures[i].D_Y = e.Y - figures[i].Y;
-        }
+        figure_index = 0;
     }
-}
-if (!flag_checked && e.Button == MouseButtons.Left)
-    switch (figure_index)
+
+    private void squareToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        case 0:
-            figures.Add(new Circle(e.X, e.Y));
-            break;
-        case 1:
-            figures.Add(new Square(e.X, e.Y));
-            break;
-        case 2:
-            figures.Add(new Triangle(e.X, e.Y));
-            break;
+        figure_index = 1;
     }
-Refresh();
-}
 
-private void circleToolStripMenuItem_Click(object sender, EventArgs e)
-{
-figure_index = 0;
-}
+    private void triangleToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        figure_index= 2;
+    }
 
-private void squareToolStripMenuItem_Click(object sender, EventArgs e)
-{
-figure_index = 1;
-}
+    private void lineColorToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        ColorDialog MyDialog = new ColorDialog();
+        // Keeps the user from selecting a custom color.
+        MyDialog.AllowFullOpen = false;
+        // Allows the user to get help. (The default is false.)
+        MyDialog.ShowHelp = true;
+        // Sets the initial color select to the current text color.
+        MyDialog.Color = Shape.lineC;
 
-private void triangleToolStripMenuItem_Click(object sender, EventArgs e)
-{
-figure_index = 2;
-}
+        // Update the text box color if the user clicks OK 
+        if (MyDialog.ShowDialog() == DialogResult.OK)
+            Shape.lineC = MyDialog.Color;
+        this.Refresh();
+    }
 
-private void lineColorToolStripMenuItem_Click(object sender, EventArgs e)
-{
-ColorDialog MyDialog = new ColorDialog();
-// Keeps the user from selecting a custom color.
-MyDialog.AllowFullOpen = false;
-// Allows the user to get help. (The default is false.)
-MyDialog.ShowHelp = true;
-// Sets the initial color select to the current text color.
-MyDialog.Color = Shape.lineC;
+    private void fillColorToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        ColorDialog MyDialog = new ColorDialog();
+        // Keeps the user from selecting a custom color.
+        MyDialog.AllowFullOpen = false;
+        // Allows the user to get help. (The default is false.)
+        MyDialog.ShowHelp = true;
+        // Sets the initial color select to the current text color.
+        MyDialog.Color = Shape.fillC;
 
-// Update the text box color if the user clicks OK 
-if (MyDialog.ShowDialog() == DialogResult.OK)
-    Shape.lineC = MyDialog.Color;
-this.Refresh();
-}
-
-private void fillColorToolStripMenuItem_Click(object sender, EventArgs e)
-{
-ColorDialog MyDialog = new ColorDialog();
-// Keeps the user from selecting a custom color.
-MyDialog.AllowFullOpen = false;
-// Allows the user to get help. (The default is false.)
-MyDialog.ShowHelp = true;
-// Sets the initial color select to the current text color.
-MyDialog.Color = Shape.fillC;
-
-// Update the text box color if the user clicks OK 
-if (MyDialog.ShowDialog() == DialogResult.OK)
-    Shape.fillC = MyDialog.Color;
-this.Refresh();
-}
+        // Update the text box color if the user clicks OK 
+        if (MyDialog.ShowDialog() == DialogResult.OK)
+            Shape.fillC = MyDialog.Color;
+        this.Refresh();
+    }
 
 
-private void radiusToolStripMenuItem_Click(object sender, EventArgs e)
-{
-Radius Form_Radius = new Radius();
-Form_Radius.Show();
-}
+    private void radiusToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Radius Form_Radius = new Radius();
+        Form_Radius.Show();
+    }
 
 
-private void simpleToolStripMenuItem_Click(object sender, EventArgs e)
-{
-algorithm = 0;
-simpleToolStripMenuItem.Checked = true;
-djarvisToolStripMenuItem.Checked = false;
-}
+    private void simpleToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        algorithm = 0;
+        simpleToolStripMenuItem.Checked = true;
+        djarvisToolStripMenuItem.Checked = false;
+    }
 
-private void Form1_MouseClick(object sender, MouseEventArgs e)
-{
-Form1_MouseDown(sender, e);
-Refresh();
-}
+    private void Form1_MouseClick(object sender, MouseEventArgs e)
+    {
+        Form1_MouseDown(sender, e);
+        Refresh();
+    }
 
-private void djarvisToolStripMenuItem_Click(object sender, EventArgs e)
-{
-algorithm = 1;
-djarvisToolStripMenuItem.Checked = true;
-simpleToolStripMenuItem.Checked = false;
-}
-}
-}
+    private void djarvisToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        algorithm = 1;
+        djarvisToolStripMenuItem.Checked = true;
+        simpleToolStripMenuItem.Checked = false;
+    }
+    }
+    }
