@@ -29,5 +29,17 @@ namespace Многоугольники
         {
             int r = trackBar1.Value;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+    public class RadiusEventArgs : EventArgs
+    {
+
+        // public delegate void RadiusChanged(object Sender, RadiusEventArgs e)
+        
+        
     }
 }

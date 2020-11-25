@@ -6,18 +6,18 @@ using System.Windows.Forms;
 
 namespace Многоугольники
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form             
     {
 
         bool flag_checked = false;
-        byte figure_index = 0; // 0 - круг 1- квадрат 2-треугольник
+        byte figure_index = 0; // 0 - круг 1- квадрат  2-треугольник
         List<Shape> figures = new List<Shape>();
         byte algorithm = 0; // 0 - simple, 1 - deighrsta
 
         public Form1()
         {
             InitializeComponent();
-            Compareness(900);
+            Compareness(1500);
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
@@ -81,7 +81,14 @@ namespace Многоугольники
             time_simle = Simple_time(figures).Elapsed;
             time_djar = Djarvis_time(figures).Elapsed;
             Console.WriteLine("{0} - time simple\n{1} - time djar", time_simle, time_djar);
-            
+            if (time_djar < time_simle)
+            {
+                Console.WriteLine("Djarvis is faster");
+            }
+            else
+            {
+                Console.WriteLine("Simple algorithm is faster");
+            }
         }
 
         private Stopwatch Simple_time(List<Shape> figures)
