@@ -17,7 +17,7 @@ namespace Многоугольники
         public Form1()
         {
             InitializeComponent();
-            Compareness(1500);
+            //Compareness(1500);
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
@@ -323,23 +323,84 @@ namespace Многоугольники
         }
     }
 
-    private void Form1_MouseDown(object sender, MouseEventArgs e)
-    {
-            for (int i = figures.Count - 1; i >= 0; i--)
-            {
-                if (figures[i].IsInside(e.X, e.Y))
+    private bool IsInsideFigure(double x, double y, List<Shape> figures)
+        {
+            bool flag = false;
+            for (int i = 0; i < figures.Count; i++)
+                for (int j = i + 1; j < figures.Count; j++)
                 {
-                    if (e.Button == MouseButtons.Right)
+                    if (figures[i].X == figures[j].X)
                     {
-                        figures.RemoveAt(i);
-                        break;
+                        if (figures[i].Y == y && figures[i].X == x)
+                        {
+                            return true;
+                        }
+                        /*for (int n = 0; n < figures.Count; n++)
+                        {
+                            if (n != i && n != j)
+                            {
+                                if ((figures[n].X <= figures[i].X) == (x <= figures[i].X))
+                                {
+                                    flag =  true;
+                                }
+                                else { flag = false; }
+                            }
+                        }*/
                     }
                     else
                     {
-                        flag_checked = true;
-                        figures[i].is_checked = true;
-                        figures[i].D_X = e.X - figures[i].X;
-                        figures[i].D_Y = e.Y - figures[i].Y;
+                        double k = (figures[i].Y - figures[j].Y + .0) / (figures[i].X - figures[j].X + .0);
+                        double b = figures[i].Y - (k * figures[i].X);
+                        if (y == x * k + b)
+                        {
+                            return true;
+                        }
+                        /*for (int n = 0; n < figures.Count; n++)
+                        {
+                            if (i != n && j != n)
+                            {
+                                if ((figures[n].Y <= (figures[n].X * k + b)) == (y <= x * k + b))
+                                {
+                                    flag = true;
+                                }
+                                else { flag = false; }
+                            }
+                        }*/
+                    }
+                }
+                return flag;
+        }
+
+    private void Form1_MouseDown(object sender, MouseEventArgs e)
+    {
+        if (figures.Count >= 3 && IsInsideFigure(e.X, e.Y, figures))
+            {
+                flag_checked = true;
+                for (int i = 0; i <= figures.Count - 1; i++)
+                {
+                    figures[i].is_checked = true;
+                    figures[i].D_X = e.X - figures[i].X;
+                    figures[i].D_Y = e.Y - figures[i].Y;
+                }
+            }
+            else
+            {
+                for (int i = figures.Count - 1; i >= 0; i--)
+                {
+                    if (figures[i].IsInside(e.X, e.Y))
+                    {
+                        if (e.Button == MouseButtons.Right)
+                        {
+                            figures.RemoveAt(i);
+                            break;
+                        }
+                        else
+                        {
+                            flag_checked = true;
+                            figures[i].is_checked = true;
+                            figures[i].D_X = e.X - figures[i].X;
+                            figures[i].D_Y = e.Y - figures[i].Y;
+                        }
                     }
                 }
             }
