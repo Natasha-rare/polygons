@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Многоугольники
@@ -326,46 +327,58 @@ namespace Многоугольники
     private bool IsInsideFigure(double x, double y, List<Shape> figures)
         {
             bool flag = false;
+            double[] X = new double[figures.Count];
+            double[] Y = new double[figures.Count];
             for (int i = 0; i < figures.Count; i++)
+            {
+                X[i] = figures[i].X;
+                Y[i] = figures[i].Y;
+            }
+            if (Y.Min() > y || Y.Max() < y || X.Max() < x || X.Min() > x) return false;
+             for (int i = 0; i < figures.Count; i++)
                 for (int j = i + 1; j < figures.Count; j++)
                 {
-                    if (figures[i].X == figures[j].X)
+                    if (figures[i].X == figures[j].X) //working
                     {
-                        if (figures[i].Y == y && figures[i].X == x)
+                        if (Math.Min(figures[i].Y, figures[j].Y) < y && Math.Max(figures[i].Y, figures[j].Y) > y 
+                            && figures[i].X == x)
                         {
                             return true;
                         }
-                        /*for (int n = 0; n < figures.Count; n++)
-                        {
-                            if (n != i && n != j)
-                            {
-                                if ((figures[n].X <= figures[i].X) == (x <= figures[i].X))
-                                {
-                                    flag =  true;
-                                }
-                                else { flag = false; }
-                            }
-                        }*/
                     }
                     else
-                    {
+                    {/*
+                        if (Math.Min(figures[i].Y, figures[j].Y) < y && Math.Max(figures[i].Y, figures[j].Y) > y
+                            && Math.Min(figures[i].X, figures[j].X) < x && Math.Max(figures[i].X, figures[j].X) > x)
+                        {
+                            flag = true;
+                        }
+                        else
+                        {
+                            return false;
+                        }*/
+                        bool count_less = false;
+                        bool count_more = false;
                         double k = (figures[i].Y - figures[j].Y + .0) / (figures[i].X - figures[j].X + .0);
                         double b = figures[i].Y - (k * figures[i].X);
-                        if (y == x * k + b)
-                        {
-                            return true;
-                        }
-                        /*for (int n = 0; n < figures.Count; n++)
+                        for (int n = 0; n < figures.Count; n++)
                         {
                             if (i != n && j != n)
                             {
-                                if ((figures[n].Y <= (figures[n].X * k + b)) == (y <= x * k + b))
+                                if (figures[n].Y <= (figures[n].X * k + b))
                                 {
-                                    flag = true;
+                                    count_less = true;
                                 }
-                                else { flag = false; }
+                                else { count_more = true; }
                             }
-                        }*/
+                        }
+                        if (y <= x * k + b) count_less = true;
+                        else count_more = true;
+                        if (count_more != count_less)
+                        {
+                            flag = true;
+                        }
+                        else flag = false;
                     }
                 }
                 return flag;
