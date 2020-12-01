@@ -17,7 +17,7 @@ namespace Многоугольники
 
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();;
             //Compareness(1500);
         }
 
@@ -324,6 +324,7 @@ namespace Многоугольники
         }
     }
 
+
     private bool IsInsideFigure(double x, double y, List<Shape> figures)
         {
             bool flag = false;
@@ -484,9 +485,15 @@ namespace Многоугольники
     private void radiusToolStripMenuItem_Click(object sender, EventArgs e)
     {
         Radius Form_Radius = new Radius();
+        Form_Radius.RC += OnRadiusChanged;
         Form_Radius.Show();
     }
-
+    
+    public void OnRadiusChanged(object sender, RadiusEventArgs e)
+    {
+        Shape.R = (int)e.radius;
+        Refresh();
+    }
 
     private void simpleToolStripMenuItem_Click(object sender, EventArgs e)
     {

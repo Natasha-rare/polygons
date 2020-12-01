@@ -12,6 +12,8 @@ namespace Многоугольники
 {
     public partial class Radius : Form
     {
+        public event RadiusChanged RC;
+
         public Radius()
         {
             InitializeComponent();
@@ -20,26 +22,25 @@ namespace Многоугольники
 
         private void Radius_Load(object sender, EventArgs e)
         {
-
+            
         }
 
-
-
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void trackBar1_Scroll(object sender, EventArgs g)
         {
-            int r = trackBar1.Value;
+            RadiusEventArgs e = new RadiusEventArgs();
+            e.radius = trackBar1.Value;
+            RC(sender, e);
         }
+    }
 
-        private void button1_Click(object sender, EventArgs e)
+    public class RadiusEventArgs : EventArgs {
+        public double radius;
+        public RadiusEventArgs()
         {
 
         }
     }
-    public class RadiusEventArgs : EventArgs
-    {
 
-        // public delegate void RadiusChanged(object Sender, RadiusEventArgs e)
-        
-        
-    }
+    public delegate void RadiusChanged(object sender, RadiusEventArgs e);
 }
+

@@ -9,7 +9,7 @@ namespace Многоугольники
 {
     abstract class Shape
     {
-        protected int R = 20;
+        public static int R = 20;
         protected int x, y, d_x, d_y;
         public static Color lineC, fillC;
         public bool is_checked = false;
@@ -23,11 +23,6 @@ namespace Многоугольники
             fillC = Color.LightPink;
         }
 
-        public int r
-        {
-            get { return this.R; }
-            set { this.R = value; }
-        }
 
         public int X
         {
