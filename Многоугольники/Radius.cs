@@ -14,9 +14,10 @@ namespace Многоугольники
     {
         public event RadiusChanged RC;
 
-        public Radius()
+        public Radius(int R)
         {
             InitializeComponent();
+            trackBar1.Value = R;
         }
 
 

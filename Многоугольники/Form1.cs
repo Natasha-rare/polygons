@@ -327,62 +327,52 @@ namespace Многоугольники
 
     private bool IsInsideFigure(double x, double y, List<Shape> figures)
         {
-            bool flag = false;
-            double[] X = new double[figures.Count];
-            double[] Y = new double[figures.Count];
-            for (int i = 0; i < figures.Count; i++)
+            List<Shape> polygon = new List<Shape>();
+            Shape check = new Square((int)x, (int)y);
+            figures.Add(check);
+            polygon.Clear();
+            // 1 самая нижняя (левая)
+            Shape A = figures[0];
+            foreach (Shape shape in figures)
             {
-                X[i] = figures[i].X;
-                Y[i] = figures[i].Y;
-            }
-            if (Y.Min() > y || Y.Max() < y || X.Max() < x || X.Min() > x) return false;
-             for (int i = 0; i < figures.Count; i++)
-                for (int j = i + 1; j < figures.Count; j++)
+                if (shape.Y > A.Y)
+                    A = shape;
+                else if (shape.Y == A.Y)
                 {
-                    if (figures[i].X == figures[j].X) //working
+                    if (shape.X < A.X) A = shape;
+                }
+            }
+            polygon.Add(A);
+
+
+            // 2 точка на прямой параллельной Ох
+            Shape F = new Square(A.X - 1000, A.Y);
+            do
+            {
+                Shape P = figures[0];
+                Point d = new Point(F.X - A.X, F.Y - A.Y);
+                double min = 100000;
+                foreach (Shape shape in figures)
+                {
+                    Point d1 = new Point(shape.X - A.X, shape.Y - A.Y);
+                    double cos = (d.X * d1.X + d.Y * d1.Y) / (Math.Sqrt(d.X * d.X + d.Y * d.Y) *
+                        Math.Sqrt(d1.X * d1.X + d1.Y * d1.Y));
+                    if (cos < min)
                     {
-                        if (Math.Min(figures[i].Y, figures[j].Y) < y && Math.Max(figures[i].Y, figures[j].Y) > y 
-                            && figures[i].X == x)
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {/*
-                        if (Math.Min(figures[i].Y, figures[j].Y) < y && Math.Max(figures[i].Y, figures[j].Y) > y
-                            && Math.Min(figures[i].X, figures[j].X) < x && Math.Max(figures[i].X, figures[j].X) > x)
-                        {
-                            flag = true;
-                        }
-                        else
-                        {
-                            return false;
-                        }*/
-                        bool count_less = false;
-                        bool count_more = false;
-                        double k = (figures[i].Y - figures[j].Y + .0) / (figures[i].X - figures[j].X + .0);
-                        double b = figures[i].Y - (k * figures[i].X);
-                        for (int n = 0; n < figures.Count; n++)
-                        {
-                            if (i != n && j != n)
-                            {
-                                if (figures[n].Y <= (figures[n].X * k + b))
-                                {
-                                    count_less = true;
-                                }
-                                else { count_more = true; }
-                            }
-                        }
-                        if (y <= x * k + b) count_less = true;
-                        else count_more = true;
-                        if (count_more != count_less)
-                        {
-                            flag = true;
-                        }
-                        else flag = false;
+                        min = cos;
+                        P = shape;
                     }
                 }
-                return flag;
+                polygon.Add(P);
+                F = A;
+                A = P;
+            } while (polygon[0] != polygon[polygon.Count - 1]);
+            figures.Remove(check);
+            if (!polygon.Contains(check))
+            {
+                return true;
+            }
+            return false;
         }
 
     private void Form1_MouseDown(object sender, MouseEventArgs e)
@@ -484,8 +474,13 @@ namespace Многоугольники
 
     private void radiusToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Radius Form_Radius = new Radius();
+        Radius Form_Radius = new Radius(Shape.R);
         Form_Radius.RC += OnRadiusChanged;
+        if (!Form_Radius.IsAccessible)
+        {
+            Form_Radius.Activate();
+        }
+
         Form_Radius.Show();
     }
     
