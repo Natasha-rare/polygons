@@ -13,7 +13,9 @@ namespace Многоугольники
         bool flag_checked = false;
         byte figure_index = 0; // 0 - круг 1- квадрат  2-треугольник
         List<Shape> figures = new List<Shape>();
-        byte algorithm = 0; // 0 - simple, 1 - deighrsta
+        byte algorithm = 1; // 0 - simple, 1 - deighrsta
+        // bool opened = false;
+        Radius Form_Radius = null;
 
         public Form1()
         {
@@ -474,14 +476,21 @@ namespace Многоугольники
 
     private void radiusToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Radius Form_Radius = new Radius(Shape.R);
-        Form_Radius.RC += OnRadiusChanged;
-        if (!Form_Radius.IsAccessible)
+        if (Form_Radius == null || Form_Radius.IsDisposed)
         {
+            Form_Radius = new Radius(Shape.R);
+            Form_Radius.RC += OnRadiusChanged;
+            Form_Radius.Show();
+        }
+        else
+        {
+            if (Form_Radius.WindowState == FormWindowState.Minimized)
+            {
+                Form_Radius.WindowState = FormWindowState.Normal;
+            }
+            Form_Radius.BringToFront();
             Form_Radius.Activate();
         }
-
-        Form_Radius.Show();
     }
     
     public void OnRadiusChanged(object sender, RadiusEventArgs e)
