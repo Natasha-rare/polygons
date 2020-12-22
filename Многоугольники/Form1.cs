@@ -16,16 +16,10 @@ namespace Многоугольники
         byte algorithm = 1; // 0 - simple, 1 - deighrsta
         // bool opened = false;
         Radius Form_Radius = null;
-        int speed = 1;
-        bool running = false;
 
         public Form1()
         {
             InitializeComponent();
-            if (running)
-            {
-                figures = Move(figures);
-            }
             //Compareness(1500);
         }
 
@@ -33,10 +27,6 @@ namespace Многоугольники
         {
             flag_checked = !flag_checked;
 
-            if (running)
-            {
-                figures = Move(figures);
-            }
 
             foreach (Shape figure in figures)
             {
@@ -60,22 +50,8 @@ namespace Многоугольники
         private void Form1_Load(object sender, EventArgs e)
         {
             DoubleBuffered = true;
-            if (running)
-            {
-                figures = Move(figures);
-            }
+            
             this.Invalidate();
-        }
-
-        private List<Shape> Move(List<Shape> figures)
-        {
-            Random r = new Random();
-            foreach (Shape shape in figures)
-            {
-                shape.X += r.Next(-1 * speed, speed + 1);
-                shape.Y += r.Next(-1 * speed, speed + 1);
-            }
-            return figures;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -88,11 +64,6 @@ namespace Многоугольники
                     Simple_Algorithm(figures, g);
                 else
                     Djarvis(figures, g);
-            }
-
-            if (running)
-            {
-                figures = Move(figures);
             }
 
             foreach (Shape figure in figures)
@@ -343,10 +314,7 @@ namespace Многоугольники
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (running)
-            {
-                figures = Move(figures);
-            }
+            
 
             if (flag_checked)
             {
@@ -414,10 +382,6 @@ namespace Многоугольники
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (running)
-            {
-                figures = Move(figures);
-            }
             if (figures.Count >= 3 && IsInsideFigure(e.X, e.Y, figures))
             {
                 flag_checked = true;
@@ -560,25 +524,67 @@ namespace Многоугольники
         //slow moving
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            speed -= 1;
+            timer1.Interval += 50;
+
         }
 
         //faster moving
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            speed += 1;
+            
+            try
+            {
+                timer1.Interval -= 50;
+            }
+            catch (Exception)
+            {
+                timer1.Interval = 5;
+            }
         }
 
         //stop moving
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            running = false;
+            //running = false;
+            timer1.Stop();
         }
 
         //start moving
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            running = true;
+           // running = true;
+            timer1.Start();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Random r = new Random();
+            foreach (Shape shape in figures)
+            {
+                shape.X += r.Next(-5, 5);
+                shape.Y += r.Next(-5, 5);
+            }
+
+            flag_checked = !flag_checked;
+
+
+            foreach (Shape figure in figures)
+            {
+                figure.is_checked = false;
+            }
+
+            if (figures.Count > 3)
+            {
+                for (int i = 0; i < figures.Count; i++)
+                {
+                    if (!figures[i].is_polygon)
+                    {
+                        figures.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+            Refresh();
         }
     }
     }
