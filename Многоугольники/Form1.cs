@@ -9,13 +9,12 @@ namespace Многоугольники
 {
     public partial class Form1 : Form             
     {
-
-        bool flag_checked = false;
         byte figure_index = 0; // 0 - круг 1- квадрат  2-треугольник
         List<Shape> figures = new List<Shape>();
         byte algorithm = 1; // 0 - simple, 1 - deighrsta
         // bool opened = false;
         Radius Form_Radius = null;
+        bool timer_started = false;
 
         public Form1()
         {
@@ -25,9 +24,6 @@ namespace Многоугольники
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-            flag_checked = !flag_checked;
-
-
             foreach (Shape figure in figures)
             {
                 figure.is_checked = false;
@@ -44,13 +40,12 @@ namespace Многоугольники
                     }
                 }
             }
-            this.Refresh();
+            Refresh();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             DoubleBuffered = true;
-            
             this.Invalidate();
         }
 
@@ -66,9 +61,20 @@ namespace Многоугольники
                     Djarvis(figures, g);
             }
 
-            foreach (Shape figure in figures)
+            for (int i = 0; i < figures.Count; i++)
             {
-                figure.Draw(g);
+                if (timer_started)
+                {
+                    if (!figures[i].is_polygon && !figures[i].is_checked)
+                    {
+                        figures.RemoveAt(i);
+                        i--;
+                    }
+                    else
+                        figures[i].Draw(g);
+                }
+                else
+                    figures[i].Draw(g);
             }
         }
 
@@ -252,6 +258,7 @@ namespace Многоугольники
                 polygon[i + 1].is_polygon = true;
                 g.DrawLine(new Pen(Shape.lineC), polygon[i].X, polygon[i].Y, polygon[i + 1].X, polygon[i + 1].Y);
             }
+            //this.figures = polygon;
         }
 
         private void Simple_Algorithm(List<Shape> figures, Graphics g)
@@ -314,19 +321,16 @@ namespace Многоугольники
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
-            
-
+            bool flag_checked = false;
+            foreach (Shape figure in figures)
+                if (figure.is_checked)
+                {
+                    flag_checked = true;
+                    figure.X = e.X - figure.D_X;
+                    figure.Y = e.Y - figure.D_Y;
+                }
             if (flag_checked)
-            {
-                foreach (Shape figure in figures)
-                    if (figure.is_checked)
-                    {
-                        figure.X = e.X - figure.D_X;
-                        figure.Y = e.Y - figure.D_Y;
-                        // break;
-                    }
-                this.Refresh();
-            }
+               Refresh();
         }
 
 
@@ -382,6 +386,7 @@ namespace Многоугольники
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
+            bool flag_checked = false;
             if (figures.Count >= 3 && IsInsideFigure(e.X, e.Y, figures))
             {
                 flag_checked = true;
@@ -531,7 +536,6 @@ namespace Многоугольники
         //faster moving
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            
             try
             {
                 timer1.Interval -= 50;
@@ -545,15 +549,15 @@ namespace Многоугольники
         //stop moving
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            //running = false;
             timer1.Stop();
+            timer_started = false;
         }
 
         //start moving
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-           // running = true;
             timer1.Start();
+            timer_started = true;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -565,10 +569,7 @@ namespace Многоугольники
                 shape.Y += r.Next(-5, 5);
             }
 
-            flag_checked = !flag_checked;
-
-
-            foreach (Shape figure in figures)
+            /*foreach (Shape figure in figures)
             {
                 figure.is_checked = false;
             }
@@ -583,7 +584,7 @@ namespace Многоугольники
                         i--;
                     }
                 }
-            }
+            }*/
             Refresh();
         }
     }
