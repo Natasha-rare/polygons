@@ -4,6 +4,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Security;
 
 namespace Многоугольники
 {
@@ -15,6 +19,8 @@ namespace Многоугольники
         // bool opened = false;
         Radius Form_Radius = null;
         bool timer_started = false;
+        Button selectButton;
+        OpenFileDialog openFileDialog1;
 
         public Form1()
         {
@@ -569,23 +575,46 @@ namespace Многоугольники
                 shape.Y += r.Next(-5, 5);
             }
 
-            /*foreach (Shape figure in figures)
-            {
-                figure.is_checked = false;
-            }
-
-            if (figures.Count > 3)
-            {
-                for (int i = 0; i < figures.Count; i++)
-                {
-                    if (!figures[i].is_polygon)
-                    {
-                        figures.RemoveAt(i);
-                        i--;
-                    }
-                }
-            }*/
             Refresh();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            openFileDialog1 = new OpenFileDialog()
+            {
+                FileName = "Select a polygon file",
+                Title = "Open polygon file"
+            };
+
+            selectButton = new Button()
+            {
+                Size = new Size(100, 20),
+                Location = new Point(15, 15),
+                Text = "Select file"
+            };
+            selectButton.Click += new EventHandler(BackState);
+            Controls.Add(selectButton);
+        }
+
+        private void BackState(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var filePath = openFileDialog1.FileName;
+                    BinaryFormatter bf = new BinaryFormatter();
+                    FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
+                    //DataObject = bf.Deserialize(fs);
+                    fs.Close();
+                }
+                catch (SecurityException ex)
+                {
+                    MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                    $"Details:\n\n{ex.StackTrace}");
+                }
+            }
         }
     }
     }
