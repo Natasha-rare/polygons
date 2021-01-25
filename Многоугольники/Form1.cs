@@ -19,7 +19,7 @@ namespace Многоугольники
         // bool opened = false;
         Radius Form_Radius = null;
         bool timer_started = false;
-        bool saved = false;
+        bool saved = true;
         string fileName = "";
         public Form1()
         {
@@ -324,6 +324,15 @@ namespace Многоугольники
             }
         }
 
+        private void NotSaved()
+        {
+            saved = false;
+            if (!this.Text.Contains("*"))
+            {
+                this.Text = this.Text + "*";
+            }
+            
+        }
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
             bool flag_checked = false;
@@ -335,7 +344,11 @@ namespace Многоугольники
                     figure.Y = e.Y - figure.D_Y;
                 }
             if (flag_checked)
-               Refresh();
+            {
+                NotSaved();
+                Refresh();
+            }
+               
         }
 
 
@@ -391,6 +404,7 @@ namespace Многоугольники
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
+            NotSaved();
             bool flag_checked = false;
             if (figures.Count >= 3 && IsInsideFigure(e.X, e.Y, figures))
             {
@@ -509,6 +523,7 @@ namespace Многоугольники
         public void OnRadiusChanged(object sender, RadiusEventArgs e)
         {
             Shape.R = (int)e.radius;
+            NotSaved();
             Refresh();
         }
 
@@ -579,71 +594,56 @@ namespace Многоугольники
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
-            OpenFileDialog openFileDialog = new OpenFileDialog()
-            {
-                FileName = "Select a polygon file",
-                Filter = "Polygon files (*.pol)|*pol",
-                Title = "Open polygon file"
-            };
-            openFileDialog.ShowDialog();
+            if (!saved) Save();
+            else { 
+                saved = true;
+                OpenFileDialog openFileDialog = new OpenFileDialog()
+                {
+                    Filter = "Polygon files (*.pol)|*pol",
+                    Title = "Open polygon file"
+                };
+                openFileDialog.ShowDialog();
 
-            if (openFileDialog.FileName != "")
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                FileStream fs = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read);
+                if (openFileDialog.FileName != "")
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    FileStream fs = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read);
 
-                this.Text = Path.GetFileName(openFileDialog.FileName);
-                figures.Clear();
-                figures = (List<Shape>)bf.Deserialize(fs);
-                Shape.fillC = (Color)bf.Deserialize(fs);
-                Shape.lineC = (Color)bf.Deserialize(fs);
-                Shape.R = (int)bf.Deserialize(fs);
-                fs.Close();
-                Refresh();
+                    this.Text = Path.GetFileName(openFileDialog.FileName);
+                    fileName = openFileDialog.FileName;
+                    figures.Clear();
+                    figures = (List<Shape>)bf.Deserialize(fs);
+                    Shape.fillC = (Color)bf.Deserialize(fs);
+                    Shape.lineC = (Color)bf.Deserialize(fs);
+                    Shape.R = (int)bf.Deserialize(fs);
+                    fs.Close();
+                    Refresh();
+                }
+                else
+                {
+                    MessageBox.Show("File name can't be null");
+                }
             }
-            else
-            {
-                MessageBox.Show("File name can't be null");
-            }
-            
-            /*selectButton = new Button()
-            {
-                Size = new Size(100, 20),
-                Location = new Point(15, 15),
-                Text = "Select file"
-            };
-            selectButton.Click += new EventHandler(BackState);
-            Controls.Add(selectButton);*/
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "Polygon file (*.pol)|*.pol";
-            saveFileDialog1.Title = "Save a Polygon File";
-            saveFileDialog1.ShowDialog();
 
-            // If the file name is not an empty string open it for saving.
-            if (saveFileDialog1.FileName != "")
-            {
-                // Saves the Image via a FileStream created by the OpenFile method.
-
-                BinaryFormatter bf = new BinaryFormatter();
-                FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Open, FileAccess.Write);
-                bf.Serialize(fs, figures);
-                bf.Serialize(fs, Shape.fillC);
-                bf.Serialize(fs, Shape.lineC);
-                bf.Serialize(fs, Shape.R);
-                fs.Close();
-            }
+            Save();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SaveAs();   
+        }
+        private void SaveAs()
+        {
+            saved = true;
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            
             saveFileDialog1.Filter = "Polygon file (*.pol)|*.pol";
             saveFileDialog1.Title = "Save a Polygon File";
+            saveFileDialog1.FileName = "Form1";
             saveFileDialog1.ShowDialog();
 
             // If the file name is not an empty string open it for saving.
@@ -652,8 +652,8 @@ namespace Многоугольники
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create, FileAccess.Write);
                 //FileStream fs = (FileStream)saveFileDialog1.OpenFile();
-                fileName = Path.GetFileName(saveFileDialog1.FileName);
-                this.Text = fileName;
+                fileName = saveFileDialog1.FileName;
+                this.Text = Path.GetFileName(saveFileDialog1.FileName);
                 bf.Serialize(fs, figures);
                 bf.Serialize(fs, Shape.fillC);
                 bf.Serialize(fs, Shape.lineC);
@@ -667,31 +667,83 @@ namespace Многоугольники
             }
         }
 
+        private void Save()
+        {
+            saved = true;
+            this.Text.Replace("*", "");
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            if (fileName == "")
+            {
+                saveFileDialog1.Filter = "Polygon file (*.pol)|*.pol";
+                saveFileDialog1.Title = "Save a Polygon File";
+                saveFileDialog1.ShowDialog();
+                fileName = saveFileDialog1.FileName;
+            }
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Write);
+                bf.Serialize(fs, figures);
+                bf.Serialize(fs, Shape.fillC);
+                bf.Serialize(fs, Shape.lineC);
+                bf.Serialize(fs, Shape.R);
+                fs.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+        }
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Polygon file (*.pol)|*.pol";
-            openFileDialog.Title = "Save a Polygon File";
-            openFileDialog.ShowDialog();
+            if (!saved)
+            {
+                var result = MessageBox.Show("You have unsaved changes. " +
+                    "Do you want to save your file?",
+                    "Form New", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    Save();
+                }
+                if (result == DialogResult.No)
+                {
+                    figures.Clear();
+                    this.Text = "Form1*";
+                    Refresh();
+                }
+            }
+            else
+            {
+                figures.Clear();
+                this.Text = "Form1*";
+                Refresh();
+            }
         }
 
+        //working
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (saved)
             {
-                //
+                e.Cancel = false;
             }
             else
             {
-                var result = MessageBox.Show("Do you want to close your file?", 
+                var result = MessageBox.Show("You have unsaved changes. " +
+                    "Do you want to save your file?",
                     "Form Closing", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    Save();
+                }
                 if (result == DialogResult.No)
                 {
-                    this.Close();
+                    e.Cancel = false;
                 }
-                else if (result == DialogResult.Yes)
+                if (result == DialogResult.Cancel)
                 {
-                    //
+                    e.Cancel = true;
                 }
             }
         }
