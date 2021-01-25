@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace Многоугольники
 {
+    [Serializable]
     abstract class Shape
     {
         public static int R = 20;
-        protected int x, y, d_x, d_y;
+        protected int x, y;
+        [NonSerialized]protected int d_x, d_y;
         public static Color lineC, fillC;
-        public bool is_checked = false;
-        public bool is_polygon = false;
+        [NonSerialized] public bool is_checked = false;
+        [NonSerialized] public bool is_polygon = false;
 
         public Shape(int x, int y) { this.x = x; this.y = y; }
 
@@ -52,6 +54,7 @@ namespace Многоугольники
         public abstract bool IsInside(int x, int y);
     }
 
+    [Serializable]
     class Circle : Shape
     {
         // public Circle() : base() { }
@@ -70,6 +73,7 @@ namespace Многоугольники
         }
     }
 
+    [Serializable]
     class Square : Shape
     {
         public int[] points = new int[4];
@@ -95,6 +99,7 @@ namespace Многоугольники
         }
     }
 
+    [Serializable]
     class Triangle : Shape
     {
         public Point[] points = { new Point(), new Point(), new Point()};

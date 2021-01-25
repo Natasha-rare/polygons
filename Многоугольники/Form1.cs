@@ -19,9 +19,8 @@ namespace Многоугольники
         // bool opened = false;
         Radius Form_Radius = null;
         bool timer_started = false;
-        Button selectButton;
-        OpenFileDialog openFileDialog1;
-
+        bool saved = false;
+        string fileName = "";
         public Form1()
         {
             InitializeComponent();
@@ -581,38 +580,118 @@ namespace Многоугольники
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
-            openFileDialog1 = new OpenFileDialog()
+            OpenFileDialog openFileDialog = new OpenFileDialog()
             {
                 FileName = "Select a polygon file",
+                Filter = "Polygon files (*.pol)|*pol",
                 Title = "Open polygon file"
             };
+            openFileDialog.ShowDialog();
 
-            selectButton = new Button()
+            if (openFileDialog.FileName != "")
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream fs = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read);
+
+                this.Text = Path.GetFileName(openFileDialog.FileName);
+                figures.Clear();
+                figures = (List<Shape>)bf.Deserialize(fs);
+                Shape.fillC = (Color)bf.Deserialize(fs);
+                Shape.lineC = (Color)bf.Deserialize(fs);
+                Shape.R = (int)bf.Deserialize(fs);
+                fs.Close();
+                Refresh();
+            }
+            else
+            {
+                MessageBox.Show("File name can't be null");
+            }
+            
+            /*selectButton = new Button()
             {
                 Size = new Size(100, 20),
                 Location = new Point(15, 15),
                 Text = "Select file"
             };
             selectButton.Click += new EventHandler(BackState);
-            Controls.Add(selectButton);
+            Controls.Add(selectButton);*/
         }
 
-        private void BackState(object sender, EventArgs e)
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "Polygon file (*.pol)|*.pol";
+            saveFileDialog1.Title = "Save a Polygon File";
+            saveFileDialog1.ShowDialog();
+
+            // If the file name is not an empty string open it for saving.
+            if (saveFileDialog1.FileName != "")
             {
-                try
+                // Saves the Image via a FileStream created by the OpenFile method.
+
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Open, FileAccess.Write);
+                bf.Serialize(fs, figures);
+                bf.Serialize(fs, Shape.fillC);
+                bf.Serialize(fs, Shape.lineC);
+                bf.Serialize(fs, Shape.R);
+                fs.Close();
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "Polygon file (*.pol)|*.pol";
+            saveFileDialog1.Title = "Save a Polygon File";
+            saveFileDialog1.ShowDialog();
+
+            // If the file name is not an empty string open it for saving.
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create, FileAccess.Write);
+                //FileStream fs = (FileStream)saveFileDialog1.OpenFile();
+                fileName = Path.GetFileName(saveFileDialog1.FileName);
+                this.Text = fileName;
+                bf.Serialize(fs, figures);
+                bf.Serialize(fs, Shape.fillC);
+                bf.Serialize(fs, Shape.lineC);
+                bf.Serialize(fs, Shape.R);
+                fs.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                $"Details:\n\n{ex.StackTrace}");
+            }
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Polygon file (*.pol)|*.pol";
+            openFileDialog.Title = "Save a Polygon File";
+            openFileDialog.ShowDialog();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (saved)
+            {
+                //
+            }
+            else
+            {
+                var result = MessageBox.Show("Do you want to close your file?", 
+                    "Form Closing", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.No)
                 {
-                    var filePath = openFileDialog1.FileName;
-                    BinaryFormatter bf = new BinaryFormatter();
-                    FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
-                    //DataObject = bf.Deserialize(fs);
-                    fs.Close();
+                    this.Close();
                 }
-                catch (SecurityException ex)
+                else if (result == DialogResult.Yes)
                 {
-                    MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                    $"Details:\n\n{ex.StackTrace}");
+                    //
                 }
             }
         }
