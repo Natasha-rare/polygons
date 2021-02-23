@@ -594,35 +594,64 @@ namespace Многоугольники
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!saved) Save();
-            else { 
-                saved = true;
-                OpenFileDialog openFileDialog = new OpenFileDialog()
+            if (!saved) {
+                var result = MessageBox.Show("You have unsaved changes. " +
+                        "Do you want to save your file?",
+                        "Form New", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Yes)
                 {
-                    Filter = "Polygon files (*.pol)|*pol",
-                    Title = "Open polygon file"
-                };
-                openFileDialog.ShowDialog();
-
-                if (openFileDialog.FileName != "")
+                    if (this.Text == "Form1*")
+                    {
+                        SaveAs();
+                    }
+                    else Save();
+                    Open();
+                    saved = true;
+                }
+                if (result == DialogResult.No)
                 {
-                    BinaryFormatter bf = new BinaryFormatter();
-                    FileStream fs = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read);
-
-                    this.Text = Path.GetFileName(openFileDialog.FileName);
-                    fileName = openFileDialog.FileName;
                     figures.Clear();
-                    figures = (List<Shape>)bf.Deserialize(fs);
-                    Shape.fillC = (Color)bf.Deserialize(fs);
-                    Shape.lineC = (Color)bf.Deserialize(fs);
-                    Shape.R = (int)bf.Deserialize(fs);
-                    fs.Close();
-                    Refresh();
+                    if (!(Form_Radius == null || Form_Radius.IsDisposed))
+                        Form_Radius.Close();
+                    Open();
+                    saved = true;
                 }
-                else
-                {
-                    MessageBox.Show("File name can't be null");
-                }
+            }
+            else
+            {
+                saved = true;
+                Open();
+            }
+        }
+
+
+        private void Open()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Filter = "Polygon files (*.pol)|*pol",
+                Title = "Open polygon file"
+            };
+            openFileDialog.ShowDialog();
+
+            if (openFileDialog.FileName != "")
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream fs = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read);
+
+                this.Text = Path.GetFileName(openFileDialog.FileName);
+                fileName = openFileDialog.FileName;
+                figures.Clear();
+                figures = (List<Shape>)bf.Deserialize(fs);
+                Shape.fillC = (Color)bf.Deserialize(fs);
+                Shape.lineC = (Color)bf.Deserialize(fs);
+                Shape.R = (int)bf.Deserialize(fs);
+                fs.Close();
+                Refresh();
+            }
+            else
+            {
+                MessageBox.Show("File name can't be null");
             }
         }
 
@@ -652,8 +681,8 @@ namespace Многоугольники
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create, FileAccess.Write);
                 //FileStream fs = (FileStream)saveFileDialog1.OpenFile();
-                fileName = saveFileDialog1.FileName;
-                this.Text = Path.GetFileName(saveFileDialog1.FileName);
+                fileName = (saveFileDialog1.FileName.Length > 0)? saveFileDialog1.FileName: "Form1" ;
+                this.Text = Path.GetFileName(fileName);
                 bf.Serialize(fs, figures);
                 bf.Serialize(fs, Shape.fillC);
                 bf.Serialize(fs, Shape.lineC);
@@ -670,7 +699,7 @@ namespace Многоугольники
         private void Save()
         {
             saved = true;
-            this.Text.Replace("*", "");
+            this.Text = this.Text.Replace("*", "");
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             if (fileName == "")
             {
@@ -704,19 +733,41 @@ namespace Многоугольники
                     "Form New", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Yes)
                 {
-                    Save();
+                    if (this.Text == "Form1*")
+                    {
+                        SaveAs();
+                    }
+                    else
+                        Save();
+                    //ask
+                    figures.Clear();
+                    saved = true;
+                    if (!(Form_Radius == null || Form_Radius.IsDisposed))
+                        Form_Radius.Close();
+                    this.Text = "Form1";
+                    Shape.R = 20;
+                    Shape.lineC = Color.Black;
+                    Shape.fillC = Color.LightPink;
+                    Refresh();
                 }
                 if (result == DialogResult.No)
                 {
                     figures.Clear();
-                    this.Text = "Form1*";
+                    if (!(Form_Radius == null || Form_Radius.IsDisposed))
+                        Form_Radius.Close();
+                    
+                    saved = true;
+                    this.Text = "Form1";
+                    Shape.R = 20;
+                    Shape.lineC = Color.Black;
+                    Shape.fillC = Color.LightPink;
                     Refresh();
                 }
             }
             else
             {
                 figures.Clear();
-                this.Text = "Form1*";
+                this.Text = "Form1";
                 Refresh();
             }
         }
