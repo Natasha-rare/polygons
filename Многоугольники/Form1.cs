@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Security;
 using ShapeClass;
+using System.Collections;
 
 namespace Многоугольники
 {
@@ -22,6 +23,8 @@ namespace Многоугольники
         bool timer_started = false;
         bool saved = true;
         string fileName = "";
+        Stack<Change> changes = new Stack<Change>();
+        Change lastChange;
         public Form1()
         {
             InitializeComponent();
@@ -341,6 +344,7 @@ namespace Многоугольники
                 if (figure.is_checked)
                 {
                     flag_checked = true;
+                    
                     figure.X = e.X - figure.D_X;
                     figure.Y = e.Y - figure.D_Y;
                 }
@@ -434,6 +438,8 @@ namespace Многоугольники
                             figures[i].is_checked = true;
                             figures[i].D_X = e.X - figures[i].X;
                             figures[i].D_Y = e.Y - figures[i].Y;
+                            Change newChange = new Move_Change(figures[i].D_X, figures[i].D_Y, i, figures);
+                            changes.Push(newChange);
                         }
                     }
                 }
@@ -797,6 +803,20 @@ namespace Многоугольники
                 {
                     e.Cancel = true;
                 }
+            }
+        }
+
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Z)
+            {
+                lastChange = changes.Pop();
+                lastChange.Undo();
+            }
+            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Y)
+            {
+                lastChange.Redo();
             }
         }
     }
