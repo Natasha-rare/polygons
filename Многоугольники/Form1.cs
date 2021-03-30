@@ -24,6 +24,7 @@ namespace Многоугольники
         bool saved = true;
         string fileName = "";
         Stack<Change> changes = new Stack<Change>();
+        Stack<Change> change_redo = new Stack<Change>();
         Change lastChange;
         public Form1()
         {
@@ -33,6 +34,7 @@ namespace Многоугольники
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
+
             foreach (Shape figure in figures)
             {
                 figure.is_checked = false;
@@ -438,17 +440,19 @@ namespace Многоугольники
                             figures[i].is_checked = true;
                             figures[i].D_X = e.X - figures[i].X;
                             figures[i].D_Y = e.Y - figures[i].Y;
-                            Change newChange = new Move_Change(figures[i].D_X, figures[i].D_Y, i, figures);
-                            changes.Push(newChange);
+                            /*Change newChange = new Move_Change(figures[i].D_X, figures[i].D_Y, i, figures);
+                            changes.Push(newChange);*/
                         }
                     }
                 }
             }
             if (!flag_checked && e.Button == MouseButtons.Left)
+            {
                 switch (figure_index)
                 {
                     case 0:
                         figures.Add(new Circle(e.X, e.Y));
+
                         break;
                     case 1:
                         figures.Add(new Square(e.X, e.Y));
@@ -457,6 +461,9 @@ namespace Многоугольники
                         figures.Add(new Triangle(e.X, e.Y));
                         break;
                 }
+                Change newChange = new Create(figures);
+                changes.Push(newChange);
+            }
             Refresh();
         }
 
@@ -809,15 +816,24 @@ namespace Многоугольники
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Z)
             {
                 lastChange = changes.Pop();
+                Console.WriteLine(lastChange);
                 lastChange.Undo();
+                change_redo.Push(lastChange);
+                Console.Write(change_redo.Count());
+                //changes.Push(lastChange);
             }
             else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Y)
             {
+                lastChange = change_redo.Pop();
                 lastChange.Redo();
+                changes.Append(lastChange);
+                //changes.Push(lastChange);
             }
+            Refresh();
         }
     }
     }

@@ -29,6 +29,16 @@ namespace Многоугольники
             this.number = -1;
         }
 
+        public int X
+        {
+            get { return dx; }
+        }
+
+        public int Number
+        {
+            get { return this.number; }
+        }
+
         public Move_Change(int dx, int dy, int number, List<Shape> figures)
         {
             this.dx = dx;
@@ -38,8 +48,12 @@ namespace Многоугольники
         }
         public override void Redo()
         {
+            Console.WriteLine($"dx={dx} dy={dy}");
             figures[number].X = figures[number].X + dx;
             figures[number].Y = figures[number].Y + dy;
+            Console.WriteLine(number);
+            Console.WriteLine(figures[number].X);
+            Console.WriteLine(figures[number].Y);
         }
 
         public override void Undo()
@@ -54,21 +68,25 @@ namespace Многоугольники
 
     class Create : Change
     {
-        int x, y;
+        //int x, y;
+        Shape figure;
+        List<Shape> figures;
 
-        public Create(int x, int y)
+        public Create(List<Shape> figures)
         {
-            this.x = x;
-            this.y = y;
+            /*this.x = x;
+            this.y = y;*/
+            this.figures = figures;
+            this.figure = figures[figures.Count - 1];
         }
         public override void Redo()
         {
-            throw new NotImplementedException();
+            figures.Add(figure);
         }
 
         public override void Undo()
         {
-            changes.Push(this);
+            figures.RemoveAt(figures.Count - 1);
         }
     }
 
