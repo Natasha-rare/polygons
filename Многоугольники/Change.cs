@@ -10,8 +10,7 @@ namespace Многоугольники
 {
     abstract class Change
     {
-        public Stack<Change> changes;
-        
+        //public Stack<Change> changes;
         
         public abstract void Undo();
         public abstract void Redo();
@@ -92,21 +91,24 @@ namespace Многоугольники
 
     class Delete : Change
     {
-        int x, y, N;
+        int N;
+        List<Shape> figures;
+        Shape figure;
 
-        public Delete(int x, int y)
+        public Delete(List<Shape> figures, int n)
         {
-            this.x = x;
-            this.y = y;
+            this.N = n;
+            this.figures = figures;
+            figure = figures[N];
         }
         public override void Redo()
         {
-            throw new NotImplementedException();
+            figures.RemoveAt(N);
         }
 
         public override void Undo()
         {
-            changes.Push(this);
+            figures.Insert(N, figure);
         }
     }
 
@@ -125,7 +127,7 @@ namespace Многоугольники
 
         public override void Undo()
         {
-            changes.Push(this);
+            //changes.Push(this);
         }
     }
 
@@ -145,7 +147,7 @@ namespace Многоугольники
 
         public override void Undo()
         {
-            changes.Push(this);
+            //changes.Push(this);
         }
     }
 
@@ -164,7 +166,7 @@ namespace Многоугольники
 
         public override void Undo()
         {
-            changes.Push(this);
+            //changes.Push(this);
         }
     }
 }

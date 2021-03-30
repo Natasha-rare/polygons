@@ -431,6 +431,8 @@ namespace Многоугольники
                     {
                         if (e.Button == MouseButtons.Right)
                         {
+                            Change newChange = new Delete(figures, i);
+                            changes.Push(newChange);
                             figures.RemoveAt(i);
                             break;
                         }
@@ -567,8 +569,8 @@ namespace Многоугольники
 
         }
 
-        //faster moving
-        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+       
+        private void toolStripMenuItem6_Click(object sender, EventArgs e)
         {
             try
             {
@@ -813,27 +815,57 @@ namespace Многоугольники
             }
         }
 
-
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Undo_Changes()
         {
-            
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Z)
+            try
             {
                 lastChange = changes.Pop();
                 Console.WriteLine(lastChange);
                 lastChange.Undo();
                 change_redo.Push(lastChange);
                 Console.Write(change_redo.Count());
-                //changes.Push(lastChange);
             }
-            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Y)
+            catch(Exception e) { }
+            Refresh();
+        }
+
+        private void Redo_Changes()
+        {
+            try
             {
                 lastChange = change_redo.Pop();
                 lastChange.Redo();
-                changes.Append(lastChange);
-                //changes.Push(lastChange);
+                changes.Push(lastChange);
             }
+            catch(Exception e) { }
             Refresh();
         }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Z)
+            {
+                Undo_Changes();
+            }
+            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Y)
+            {
+                Redo_Changes();
+            }
+            
+        }
+
+        //undo_arrow
+        private void toolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            Undo_Changes();
+        }
+
+        //redo_arrow
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            Redo_Changes();
+        }
+
+
     }
     }
