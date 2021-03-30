@@ -23,6 +23,7 @@ namespace Многоугольники
         bool timer_started = false;
         bool saved = true;
         string fileName = "";
+        /*int firstX, firstY;*/
         Stack<Change> changes = new Stack<Change>();
         Stack<Change> change_redo = new Stack<Change>();
         Change lastChange;
@@ -37,6 +38,13 @@ namespace Многоугольники
 
             foreach (Shape figure in figures)
             {
+                if (figure.is_checked)
+                {
+                    /*Change newChange = new Move_Change(figure.X - firstX, figure.Y - firstY, figures.IndexOf(figure), figures);
+                    changes.Push(newChange);
+                    firstX = -1000;
+                    firstY = -1000;*/
+                }
                 figure.is_checked = false;
             }
 
@@ -346,9 +354,19 @@ namespace Многоугольники
                 if (figure.is_checked)
                 {
                     flag_checked = true;
-                    
                     figure.X = e.X - figure.D_X;
                     figure.Y = e.Y - figure.D_Y;
+                    /*if (firstX == -1000 && firstY == -1000)
+                    {
+                        firstY = figure.Y;
+                        firstX = figure.X;
+                    }*/
+                    /*if (changes.Peek().GetType() == typeof(Move_Change))
+                    {
+                        lastChange = changes.Pop();
+                        
+                    }*/
+
                 }
             if (flag_checked)
             {
@@ -454,7 +472,6 @@ namespace Многоугольники
                 {
                     case 0:
                         figures.Add(new Circle(e.X, e.Y));
-
                         break;
                     case 1:
                         figures.Add(new Square(e.X, e.Y));
@@ -464,6 +481,7 @@ namespace Многоугольники
                         break;
                 }
                 Change newChange = new Create(figures);
+            
                 changes.Push(newChange);
             }
             Refresh();
@@ -496,7 +514,11 @@ namespace Многоугольники
 
             // Update the text box color if the user clicks OK 
             if (MyDialog.ShowDialog() == DialogResult.OK)
+            {
+                Change newChange = new Color_Change(Shape.lineC, MyDialog.Color, false);
+                changes.Push(newChange);
                 Shape.lineC = MyDialog.Color;
+            }
             this.Refresh();
         }
 
@@ -512,7 +534,11 @@ namespace Многоугольники
 
             // Update the text box color if the user clicks OK 
             if (MyDialog.ShowDialog() == DialogResult.OK)
+            {
+                Change newChange = new Color_Change(Shape.fillC, MyDialog.Color, true);
+                changes.Push(newChange);
                 Shape.fillC = MyDialog.Color;
+            }
             this.Refresh();
         }
 

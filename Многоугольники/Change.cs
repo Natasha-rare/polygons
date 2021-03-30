@@ -10,8 +10,10 @@ namespace Многоугольники
 {
     abstract class Change
     {
+        public Move_Change X { get; internal set; }
+
         //public Stack<Change> changes;
-        
+
         public abstract void Undo();
         public abstract void Redo();
     }
@@ -31,6 +33,13 @@ namespace Многоугольники
         public int X
         {
             get { return dx; }
+            set { dx += value; }
+        }
+
+        public int Y
+        {
+            get { return dy; }
+            set { dy += value; }
         }
 
         public int Number
@@ -47,21 +56,17 @@ namespace Многоугольники
         }
         public override void Redo()
         {
-            Console.WriteLine($"dx={dx} dy={dy}");
+
             figures[number].X = figures[number].X + dx;
             figures[number].Y = figures[number].Y + dy;
-            Console.WriteLine(number);
-            Console.WriteLine(figures[number].X);
-            Console.WriteLine(figures[number].Y);
+
         }
 
         public override void Undo()
         {
             figures[number].X = figures[number].X - dx;
             figures[number].Y = figures[number].Y - dy;
-            Console.WriteLine(number);
-            Console.WriteLine(figures[number].X);
-            Console.WriteLine(figures[number].Y);
+
         }
     }
 
@@ -134,20 +139,36 @@ namespace Многоугольники
     class Color_Change : Change
     {
         Color Cold, Cnew;
+        bool fill;
 
-        public Color_Change(Color Cold, Color Cnew)
+        public Color_Change(Color Cold, Color Cnew, bool fill)
         {
             this.Cold = Cold;
             this.Cnew = Cnew;
+            this.fill = fill;
         }
         public override void Redo()
         {
-            throw new NotImplementedException();
+            if (fill)
+            {
+                Shape.fillC = Cnew;
+            }
+            else
+            {
+                Shape.lineC = Cnew;
+            }
         }
 
         public override void Undo()
         {
-            //changes.Push(this);
+            if (fill)
+            {
+                Shape.fillC = Cold;
+            }
+            else
+            {
+                Shape.lineC = Cold;
+            }
         }
     }
 
