@@ -10,8 +10,6 @@ namespace Многоугольники
 {
     abstract class Change
     {
-        public Move_Change X { get; internal set; }
-
         //public Stack<Change> changes;
 
         public abstract void Undo();
@@ -172,22 +170,24 @@ namespace Многоугольники
         }
     }
 
-    class Form_Change : Change
+    class Type_Change : Change
     {
-        Shape shape;
-
-        public Form_Change(Shape shape)
+        byte typeOld, typeNew;
+        Form1 form1;
+        public Type_Change(byte typeOld, byte typeNew, Form1 form)
         {
-            this.shape = shape;
+            this.typeNew = typeNew;
+            this.typeOld = typeOld;
+            this.form1 = form;
         }
         public override void Redo()
         {
-            throw new NotImplementedException();
+            form1.Figure_Index = typeNew;
         }
 
         public override void Undo()
         {
-            //changes.Push(this);
+            form1.Figure_Index = typeOld;
         }
     }
 }

@@ -487,19 +487,31 @@ namespace Многоугольники
             Refresh();
         }
 
+        public byte Figure_Index
+        {
+            get { return this.figure_index; }
+            set { this.figure_index = value; }
+        }
+
         private void circleToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Change newChange = new Type_Change(figure_index, 0, this);
+            changes.Push(newChange);
             figure_index = 0;
         }
 
         private void squareToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Change newChange = new Type_Change(figure_index, 1, this);
+            changes.Push(newChange);
             figure_index = 1;
         }
 
         private void triangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            figure_index= 2;
+            Change newChange = new Type_Change(figure_index, 2, this);
+            changes.Push(newChange);
+            figure_index = 2;
         }
 
         private void lineColorToolStripMenuItem_Click(object sender, EventArgs e)
