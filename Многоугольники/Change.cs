@@ -125,12 +125,12 @@ namespace Многоугольники
         }
         public override void Redo()
         {
-            throw new NotImplementedException();
+            Shape.R += dr;
         }
 
         public override void Undo()
         {
-            //changes.Push(this);
+            Shape.R -= dr;
         }
     }
 

@@ -20,6 +20,7 @@ namespace Многоугольники
         byte algorithm = 1; // 0 - simple, 1 - deighrsta
         // bool opened = false;
         Radius Form_Radius = null;
+        int old_radius = 20;
         bool timer_started = false;
         bool saved = true;
         string fileName = "";
@@ -95,6 +96,16 @@ namespace Многоугольники
                 else
                     figures[i].Draw(g);
             }
+
+            
+            /*if (Form_Radius != null)
+                if(Form_Radius.WindowState == FormWindowState.Minimized || !Form_Radius.IsAccessible)
+            {
+                
+                Change newChange = new Radius_Change(Shape.R - old_radius);
+                changes.Push(newChange);
+                
+            }*/
         }
 
         //сравнение эффективности 2-х алгоритмов
@@ -560,6 +571,9 @@ namespace Многоугольники
             if (Form_Radius == null || Form_Radius.IsDisposed)
             {
                 Form_Radius = new Radius(Shape.R);
+                Form_Radius.LostFocus += UpdateRadius;
+                Form_Radius.Deactivate += UpdateRadius;
+
                 Form_Radius.RC += OnRadiusChanged;
                 Form_Radius.Show();
             }
@@ -569,11 +583,22 @@ namespace Многоугольники
                 {
                     Form_Radius.WindowState = FormWindowState.Normal;
                 }
+                old_radius = Shape.R;
                 Form_Radius.BringToFront();
                 Form_Radius.Activate();
             }
         }
-    
+
+        public void UpdateRadius(object sender, System.EventArgs e)
+        {
+            if (Shape.R != old_radius)
+            {
+                Change newChange = new Radius_Change(Shape.R - old_radius);
+                changes.Push(newChange);
+                old_radius = Shape.R;
+            }
+        }
+        
         public void OnRadiusChanged(object sender, RadiusEventArgs e)
         {
             Shape.R = (int)e.radius;
@@ -604,7 +629,6 @@ namespace Многоугольники
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             timer1.Interval += 50;
-
         }
 
        
@@ -711,7 +735,6 @@ namespace Многоугольники
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             Save();
         }
 
@@ -881,6 +904,7 @@ namespace Многоугольники
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Z)
             {
                 Undo_Changes();
@@ -888,6 +912,14 @@ namespace Многоугольники
             else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.Y)
             {
                 Redo_Changes();
+            }
+            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.S)
+            {
+                if (this.Text == "Form1*")
+                {
+                    SaveAs();
+                }
+                else Save();
             }
             
         }
