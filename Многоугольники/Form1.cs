@@ -97,15 +97,6 @@ namespace Многоугольники
                     figures[i].Draw(g);
             }
 
-            
-            /*if (Form_Radius != null)
-                if(Form_Radius.WindowState == FormWindowState.Minimized || !Form_Radius.IsAccessible)
-            {
-                
-                Change newChange = new Radius_Change(Shape.R - old_radius);
-                changes.Push(newChange);
-                
-            }*/
         }
 
         //сравнение эффективности 2-х алгоритмов
@@ -288,7 +279,6 @@ namespace Многоугольники
                 polygon[i + 1].is_polygon = true;
                 g.DrawLine(new Pen(Shape.lineC), polygon[i].X, polygon[i].Y, polygon[i + 1].X, polygon[i + 1].Y);
             }
-            //this.figures = polygon;
         }
 
         private void Simple_Algorithm(List<Shape> figures, Graphics g)
@@ -365,19 +355,10 @@ namespace Многоугольники
                 if (figure.is_checked)
                 {
                     flag_checked = true;
+                    Change newChange = new Move_Change(figure.X - e.X + figure.D_X, figure.Y - e.Y + figure.D_Y, figures.IndexOf(figure), figures);
+                    changes.Push(newChange);
                     figure.X = e.X - figure.D_X;
                     figure.Y = e.Y - figure.D_Y;
-                    /*if (firstX == -1000 && firstY == -1000)
-                    {
-                        firstY = figure.Y;
-                        firstX = figure.X;
-                    }*/
-                    /*if (changes.Peek().GetType() == typeof(Move_Change))
-                    {
-                        lastChange = changes.Pop();
-                        
-                    }*/
-
                 }
             if (flag_checked)
             {
@@ -573,7 +554,6 @@ namespace Многоугольники
                 Form_Radius = new Radius(Shape.R);
                 Form_Radius.LostFocus += UpdateRadius;
                 Form_Radius.Deactivate += UpdateRadius;
-
                 Form_Radius.RC += OnRadiusChanged;
                 Form_Radius.Show();
             }
@@ -666,7 +646,6 @@ namespace Многоугольники
                 shape.X += r.Next(-5, 5);
                 shape.Y += r.Next(-5, 5);
             }
-
             Refresh();
         }
 
@@ -880,11 +859,17 @@ namespace Многоугольники
         {
             try
             {
-                lastChange = changes.Pop();
-                Console.WriteLine(lastChange);
-                lastChange.Undo();
-                change_redo.Push(lastChange);
-                Console.Write(change_redo.Count());
+                if (changes.Peek().GetType() == typeof(Move_Change))
+                {
+                    Move_Changes_Undo();
+                }
+                else
+                {
+                    lastChange = changes.Pop();
+                    lastChange.Undo();
+                    change_redo.Push(lastChange);
+                }
+                
             }
             catch(Exception e) { }
             Refresh();
@@ -894,14 +879,40 @@ namespace Многоугольники
         {
             try
             {
-                lastChange = change_redo.Pop();
-                lastChange.Redo();
-                changes.Push(lastChange);
+                if (changes.Peek().GetType() == typeof(Move_Change))
+                {
+                    Move_Changes_Redo();
+                }
+                else
+                {
+                    lastChange = change_redo.Pop();
+                    lastChange.Redo();
+                    changes.Push(lastChange);
+                }
             }
             catch(Exception e) { }
             Refresh();
         }
 
+        private void Move_Changes_Undo()
+        {
+            while (changes.Peek().GetType() == typeof(Move_Change))
+            {
+                lastChange = changes.Pop();
+                lastChange.Undo();
+                change_redo.Push(lastChange);
+            }
+        }
+
+        private void Move_Changes_Redo()
+        {
+            while (changes.Peek().GetType() == typeof(Move_Change))
+            {
+                lastChange = change_redo.Pop();
+                lastChange.Redo();
+                changes.Push(lastChange);
+            }
+        }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             
@@ -935,7 +946,6 @@ namespace Многоугольники
         {
             Redo_Changes();
         }
-
 
     }
     }

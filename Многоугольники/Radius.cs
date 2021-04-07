@@ -34,7 +34,6 @@ namespace Многоугольники
         public double radius;
         public RadiusEventArgs()
         {
-
         }
     }
 

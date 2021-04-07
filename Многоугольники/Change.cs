@@ -28,42 +28,24 @@ namespace Многоугольники
             this.number = -1;
         }
 
-        public int X
-        {
-            get { return dx; }
-            set { dx += value; }
-        }
-
-        public int Y
-        {
-            get { return dy; }
-            set { dy += value; }
-        }
-
-        public int Number
-        {
-            get { return this.number; }
-        }
-
         public Move_Change(int dx, int dy, int number, List<Shape> figures)
         {
-            this.dx = dx;
-            this.dy = dy;
+            this.dx += dx;
+            this.dy += dy;
             this.number = number;
             this.figures = figures;
         }
+
         public override void Redo()
         {
-
-            figures[number].X = figures[number].X + dx;
-            figures[number].Y = figures[number].Y + dy;
-
+            figures[number].X = figures[number].X - dx;
+            figures[number].Y = figures[number].Y - dy;
         }
 
         public override void Undo()
         {
-            figures[number].X = figures[number].X - dx;
-            figures[number].Y = figures[number].Y - dy;
+            figures[number].X = figures[number].X + dx;
+            figures[number].Y = figures[number].Y + dy;
 
         }
     }
