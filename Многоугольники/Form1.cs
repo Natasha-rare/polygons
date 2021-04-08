@@ -882,18 +882,6 @@ namespace Многоугольники
                     lastChange.Undo();
                     change_redo.Push(lastChange);
                 }
-                
-                /*if (changes.Peek().GetType() == typeof(Move_Change))
-                {
-                    Move_Changes_Undo();
-                }
-                else
-                {
-                    lastChange = changes.Pop();
-                    lastChange.Undo();
-                    change_redo.Push(lastChange);
-                }*/
-                
             }
             catch(Exception e) { }
             Refresh();
@@ -911,40 +899,11 @@ namespace Многоугольники
                     changes.Push(lastChange);
                 }
                 changes.Push(change_redo.Pop());
-                /*if (change_redo.Peek().GetType() == typeof(Move_Change))
-                {
-                    Move_Changes_Redo();
-                }
-                else
-                {
-                    lastChange = change_redo.Pop();
-                    lastChange.Redo();
-                    changes.Push(lastChange);
-                }*/
             }
             catch(Exception e) { }
             Refresh();
         }
 
-        private void Move_Changes_Undo()
-        {
-            while (changes.Peek().GetType() == typeof(Move_Change))
-            {
-                lastChange = changes.Pop();
-                lastChange.Undo();
-                change_redo.Push(lastChange);
-            }
-        }
-
-        private void Move_Changes_Redo()
-        {
-            while (change_redo.Peek().GetType() == typeof(Move_Change))
-            {
-                lastChange = change_redo.Pop();
-                lastChange.Redo();
-                changes.Push(lastChange);
-            }
-        }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             
