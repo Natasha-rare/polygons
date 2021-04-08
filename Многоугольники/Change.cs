@@ -74,6 +74,19 @@ namespace Многоугольники
         }
     }
 
+    // empty change
+    class Empty : Change
+    {
+        public override void Redo()
+        {
+            //
+        }
+
+        public override void Undo()
+        {
+            //
+        }
+    }
     class Delete : Change
     {
         int N;

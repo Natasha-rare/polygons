@@ -36,25 +36,22 @@ namespace Многоугольники
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-
+            if (changes.Peek().GetType() != typeof(Empty))
+                changes.Push(new Empty());
             foreach (Shape figure in figures)
             {
-                if (figure.is_checked)
-                {
-                    /*Change newChange = new Move_Change(figure.X - firstX, figure.Y - firstY, figures.IndexOf(figure), figures);
-                    changes.Push(newChange);
-                    firstX = -1000;
-                    firstY = -1000;*/
-                }
                 figure.is_checked = false;
             }
-
             if (figures.Count > 3)
             {
                 for (int i = 0; i < figures.Count; i++)
                 {
                     if (!figures[i].is_polygon)
                     {
+                        changes.Pop();
+                        Change newChange = new Delete(figures, i);
+                        changes.Push(newChange);
+                        changes.Push(new Empty());
                         figures.RemoveAt(i);
                         i--;
                     }
@@ -279,6 +276,17 @@ namespace Многоугольники
                 polygon[i + 1].is_polygon = true;
                 g.DrawLine(new Pen(Shape.lineC), polygon[i].X, polygon[i].Y, polygon[i + 1].X, polygon[i + 1].Y);
             }
+            /*for (int i=0; i < figures.Count; i++)
+            {
+                if (!figures[i].is_polygon)
+                {
+                    changes.Pop();
+                    Change newChange = new Delete(figures, i);
+                    changes.Push(newChange);
+                    changes.Push(new Empty());
+                }
+            }*/
+            
         }
 
         private void Simple_Algorithm(List<Shape> figures, Graphics g)
@@ -360,6 +368,7 @@ namespace Многоугольники
                     figure.X = e.X - figure.D_X;
                     figure.Y = e.Y - figure.D_Y;
                 }
+            
             if (flag_checked)
             {
                 NotSaved();
@@ -443,6 +452,7 @@ namespace Многоугольники
                         {
                             Change newChange = new Delete(figures, i);
                             changes.Push(newChange);
+                            changes.Push(new Empty());
                             figures.RemoveAt(i);
                             break;
                         }
@@ -473,8 +483,8 @@ namespace Многоугольники
                         break;
                 }
                 Change newChange = new Create(figures);
-            
                 changes.Push(newChange);
+                changes.Push(new Empty());
             }
             Refresh();
         }
@@ -489,6 +499,7 @@ namespace Многоугольники
         {
             Change newChange = new Type_Change(figure_index, 0, this);
             changes.Push(newChange);
+            changes.Push(new Empty());
             figure_index = 0;
         }
 
@@ -496,6 +507,7 @@ namespace Многоугольники
         {
             Change newChange = new Type_Change(figure_index, 1, this);
             changes.Push(newChange);
+            changes.Push(new Empty());
             figure_index = 1;
         }
 
@@ -503,6 +515,7 @@ namespace Многоугольники
         {
             Change newChange = new Type_Change(figure_index, 2, this);
             changes.Push(newChange);
+            changes.Push(new Empty());
             figure_index = 2;
         }
 
@@ -521,6 +534,7 @@ namespace Многоугольники
             {
                 Change newChange = new Color_Change(Shape.lineC, MyDialog.Color, false);
                 changes.Push(newChange);
+                changes.Push(new Empty());
                 Shape.lineC = MyDialog.Color;
             }
             this.Refresh();
@@ -541,6 +555,7 @@ namespace Многоугольники
             {
                 Change newChange = new Color_Change(Shape.fillC, MyDialog.Color, true);
                 changes.Push(newChange);
+                changes.Push(new Empty());
                 Shape.fillC = MyDialog.Color;
             }
             this.Refresh();
@@ -575,6 +590,7 @@ namespace Многоугольники
             {
                 Change newChange = new Radius_Change(Shape.R - old_radius);
                 changes.Push(newChange);
+                changes.Push(new Empty());
                 old_radius = Shape.R;
             }
         }
@@ -859,7 +875,15 @@ namespace Многоугольники
         {
             try
             {
-                if (changes.Peek().GetType() == typeof(Move_Change))
+                change_redo.Push(changes.Pop());
+                while (changes.Peek().GetType() != typeof(Empty))
+                {
+                    lastChange = changes.Pop();
+                    lastChange.Undo();
+                    change_redo.Push(lastChange);
+                }
+                
+                /*if (changes.Peek().GetType() == typeof(Move_Change))
                 {
                     Move_Changes_Undo();
                 }
@@ -868,7 +892,7 @@ namespace Многоугольники
                     lastChange = changes.Pop();
                     lastChange.Undo();
                     change_redo.Push(lastChange);
-                }
+                }*/
                 
             }
             catch(Exception e) { }
@@ -879,7 +903,15 @@ namespace Многоугольники
         {
             try
             {
-                if (changes.Peek().GetType() == typeof(Move_Change))
+                
+                while (change_redo.Peek().GetType() != typeof(Empty))
+                {
+                    lastChange = change_redo.Pop();
+                    lastChange.Redo();
+                    changes.Push(lastChange);
+                }
+                changes.Push(change_redo.Pop());
+                /*if (change_redo.Peek().GetType() == typeof(Move_Change))
                 {
                     Move_Changes_Redo();
                 }
@@ -888,7 +920,7 @@ namespace Многоугольники
                     lastChange = change_redo.Pop();
                     lastChange.Redo();
                     changes.Push(lastChange);
-                }
+                }*/
             }
             catch(Exception e) { }
             Refresh();
@@ -906,7 +938,7 @@ namespace Многоугольники
 
         private void Move_Changes_Redo()
         {
-            while (changes.Peek().GetType() == typeof(Move_Change))
+            while (change_redo.Peek().GetType() == typeof(Move_Change))
             {
                 lastChange = change_redo.Pop();
                 lastChange.Redo();
