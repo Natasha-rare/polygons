@@ -82,8 +82,13 @@ namespace Многоугольники
             {
                 if (timer_started)
                 {
+                    
                     if (!figures[i].is_polygon && !figures[i].is_checked)
                     {
+                        changes.Pop();
+                        Change newChange = new Delete(figures, i);
+                        changes.Push(newChange);
+                        changes.Push(new Empty());
                         figures.RemoveAt(i);
                         i--;
                     }
@@ -659,9 +664,15 @@ namespace Многоугольники
             Random r = new Random();
             foreach (Shape shape in figures)
             {
-                shape.X += r.Next(-5, 5);
-                shape.Y += r.Next(-5, 5);
+                int dx, dy;
+                dx = r.Next(-5, 5);
+                dy = r.Next(-5, 5);
+                shape.X += dx;
+                shape.Y += dy;
+                Change newChange = new Move_Change(-dx, -dy, figures.IndexOf(shape), figures);
+                changes.Push(newChange);
             }
+            changes.Push(new Empty());
             Refresh();
         }
 
