@@ -12,7 +12,7 @@ namespace Многоугольники
     {
         public static int R = 20;
         protected int x, y;
-        [NonSerialized]protected int d_x, d_y;
+        [NonSerialized]protected int d_x, d_y, start_x, start_y;
         public static Color lineC, fillC;
         [NonSerialized] public bool is_checked = false;
         [NonSerialized] public bool is_polygon = false;
@@ -35,6 +35,18 @@ namespace Многоугольники
         {
             get { return this.y; }
             set { this.y = value; }
+        }
+
+        public int StartX
+        {
+            get { return this.start_x; }
+            set { this.start_x = value; }
+        }
+
+        public int StartY
+        {
+            get { return this.start_y; }
+            set { this.start_y = value; }
         }
 
         public int D_X

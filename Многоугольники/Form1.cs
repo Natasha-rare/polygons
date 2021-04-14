@@ -24,7 +24,7 @@ namespace Многоугольники
         bool timer_started = false;
         bool saved = true;
         string fileName = "";
-        /*int firstX, firstY;*/
+        int firstX, firstY;
         Stack<Change> changes = new Stack<Change>();
         Stack<Change> change_redo = new Stack<Change>();
         Change lastChange;
@@ -49,6 +49,7 @@ namespace Многоугольники
                     if (!figures[i].is_polygon)
                     {
                         changes.Pop();
+                        change_redo.Clear();
                         Change newChange = new Delete(figures, i);
                         changes.Push(newChange);
                         changes.Push(new Empty());
@@ -85,7 +86,8 @@ namespace Многоугольники
                     
                     if (!figures[i].is_polygon && !figures[i].is_checked)
                     {
-                        changes.Pop();
+                        //changes.Pop();
+                        change_redo.Clear();
                         Change newChange = new Delete(figures, i);
                         changes.Push(newChange);
                         changes.Push(new Empty());
@@ -368,6 +370,7 @@ namespace Многоугольники
                 if (figure.is_checked)
                 {
                     flag_checked = true;
+                    change_redo.Clear();
                     Change newChange = new Move_Change(figure.X - e.X + figure.D_X, figure.Y - e.Y + figure.D_Y, figures.IndexOf(figure), figures);
                     changes.Push(newChange);
                     figure.X = e.X - figure.D_X;
@@ -455,6 +458,7 @@ namespace Многоугольники
                     {
                         if (e.Button == MouseButtons.Right)
                         {
+                            change_redo.Clear();
                             Change newChange = new Delete(figures, i);
                             changes.Push(newChange);
                             changes.Push(new Empty());
@@ -487,6 +491,7 @@ namespace Многоугольники
                         figures.Add(new Triangle(e.X, e.Y));
                         break;
                 }
+                change_redo.Clear();
                 Change newChange = new Create(figures);
                 changes.Push(newChange);
                 changes.Push(new Empty());
@@ -502,6 +507,7 @@ namespace Многоугольники
 
         private void circleToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            change_redo.Clear();
             Change newChange = new Type_Change(figure_index, 0, this);
             changes.Push(newChange);
             changes.Push(new Empty());
@@ -510,6 +516,7 @@ namespace Многоугольники
 
         private void squareToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            change_redo.Clear();
             Change newChange = new Type_Change(figure_index, 1, this);
             changes.Push(newChange);
             changes.Push(new Empty());
@@ -518,6 +525,7 @@ namespace Многоугольники
 
         private void triangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            change_redo.Clear();
             Change newChange = new Type_Change(figure_index, 2, this);
             changes.Push(newChange);
             changes.Push(new Empty());
@@ -537,6 +545,7 @@ namespace Многоугольники
             // Update the text box color if the user clicks OK 
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
+                change_redo.Clear();
                 Change newChange = new Color_Change(Shape.lineC, MyDialog.Color, false);
                 changes.Push(newChange);
                 changes.Push(new Empty());
@@ -558,6 +567,7 @@ namespace Многоугольники
             // Update the text box color if the user clicks OK 
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
+                change_redo.Clear();
                 Change newChange = new Color_Change(Shape.fillC, MyDialog.Color, true);
                 changes.Push(newChange);
                 changes.Push(new Empty());
@@ -593,6 +603,7 @@ namespace Многоугольники
         {
             if (Shape.R != old_radius)
             {
+                change_redo.Clear();
                 Change newChange = new Radius_Change(Shape.R - old_radius);
                 changes.Push(newChange);
                 changes.Push(new Empty());
@@ -650,6 +661,10 @@ namespace Многоугольники
         {
             timer1.Stop();
             timer_started = false;
+            change_redo.Clear();
+            Change newChange = new Move_Change_Dinamic(figures);
+            changes.Push(newChange);
+            changes.Push(new Empty());
         }
 
         //start moving
@@ -657,6 +672,11 @@ namespace Многоугольники
         {
             timer1.Start();
             timer_started = true;
+            foreach (Shape figure in figures)
+            {
+                figure.StartX = figure.X;
+                figure.StartY = figure.Y;
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -669,10 +689,11 @@ namespace Многоугольники
                 dy = r.Next(-5, 5);
                 shape.X += dx;
                 shape.Y += dy;
+                /*change_redo.Clear();
                 Change newChange = new Move_Change(-dx, -dy, figures.IndexOf(shape), figures);
-                changes.Push(newChange);
+                changes.Push(newChange);*/
             }
-            changes.Push(new Empty());
+            //changes.Push(new Empty());
             Refresh();
         }
 

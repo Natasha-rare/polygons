@@ -33,7 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ShapeClass">
+    <Reference Include="Shape">
+      <HintPath>..\..\..\source\repos\Shape\bin\Debug\Shape.dll</HintPath>
+    </Reference>
+    <Reference Include="ShapeClass, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\source\repos\ShapeClass\bin\Debug\ShapeClass.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -92,6 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

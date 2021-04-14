@@ -1,2 +1,6 @@
 C:\Users\nattt\coding\polygons\ShapeClass\obj\Debug\ShapeClass.csprojAssemblyReference.cache
 C:\Users\nattt\coding\polygons\ShapeClass\obj\Debug\ShapeClass.csproj.CoreCompileInputs.cache
+C:\Users\nattt\coding\polygons\ShapeClass\bin\Debug\ShapeClass.dll
+C:\Users\nattt\coding\polygons\ShapeClass\bin\Debug\ShapeClass.pdb
+C:\Users\nattt\coding\polygons\ShapeClass\obj\Debug\ShapeClass.dll
+C:\Users\nattt\coding\polygons\ShapeClass\obj\Debug\ShapeClass.pdb

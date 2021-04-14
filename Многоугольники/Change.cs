@@ -21,13 +21,6 @@ namespace Многоугольники
         int dx, dy, number;
         List<Shape> figures;
 
-        public Move_Change(int dx, int dy)
-        {
-            this.dx = dx;
-            this.dy = dy;
-            this.number = -1;
-        }
-
         public Move_Change(int dx, int dy, int number, List<Shape> figures)
         {
             this.dx += dx;
@@ -47,6 +40,44 @@ namespace Многоугольники
             figures[number].X = figures[number].X + dx;
             figures[number].Y = figures[number].Y + dy;
 
+        }
+    }
+
+    class Move_Change_Dinamic : Change
+    {
+        List<int> Dx = new List<int>();
+        List<int> Dy = new List<int>();
+        int dx, dy;
+        List<Shape> figures;
+
+        public Move_Change_Dinamic(List<Shape> figures)
+        {
+            this.figures = figures;
+            for (int number = 0; number < figures.Count(); number++)
+            {
+                dx = figures[number].StartX - figures[number].X;
+                dy = figures[number].StartY - figures[number].Y;
+                Dx.Add(dx);
+                Dy.Add(dy);
+            }
+        }
+
+        public override void Redo()
+        {
+            for (int number = 0; number < figures.Count(); number++)
+            {
+                figures[number].X = figures[number].X - Dx[number];
+                figures[number].Y = figures[number].Y - Dy[number];
+            }
+        }
+
+        public override void Undo()
+        {
+            for (int number = 0; number < figures.Count(); number++)
+            {
+                figures[number].X = figures[number].X + Dx[number];
+                figures[number].Y = figures[number].Y + Dy[number];
+            }
         }
     }
 
