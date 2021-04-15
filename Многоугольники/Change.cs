@@ -55,6 +55,12 @@ namespace Многоугольники
             this.figures = figures;
             for (int number = 0; number < figures.Count(); number++)
             {
+                if (figures[number].StartX == 0 && figures[number].StartY == 0)
+                {
+                    /*figures.RemoveAt(number);
+                    number--;*/
+                    continue;
+                }
                 dx = figures[number].StartX - figures[number].X;
                 dy = figures[number].StartY - figures[number].Y;
                 Dx.Add(dx);
@@ -73,6 +79,7 @@ namespace Многоугольники
 
         public override void Undo()
         {
+
             for (int number = 0; number < figures.Count(); number++)
             {
                 figures[number].X = figures[number].X + Dx[number];

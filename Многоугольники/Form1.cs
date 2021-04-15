@@ -24,7 +24,7 @@ namespace Многоугольники
         bool timer_started = false;
         bool saved = true;
         string fileName = "";
-        int firstX, firstY;
+        int firstX, firstY, start_stack_count;
         Stack<Change> changes = new Stack<Change>();
         Stack<Change> change_redo = new Stack<Change>();
         Change lastChange;
@@ -662,6 +662,7 @@ namespace Многоугольники
             timer1.Stop();
             timer_started = false;
             change_redo.Clear();
+            
             Change newChange = new Move_Change_Dinamic(figures);
             changes.Push(newChange);
             changes.Push(new Empty());
@@ -677,6 +678,7 @@ namespace Многоугольники
                 figure.StartX = figure.X;
                 figure.StartY = figure.Y;
             }
+            start_stack_count = changes.Count();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -910,7 +912,17 @@ namespace Многоугольники
                 change_redo.Push(changes.Pop());
                 while (changes.Peek().GetType() != typeof(Empty))
                 {
+                    
                     lastChange = changes.Pop();
+                    if (typeof(Move_Change_Dinamic) == lastChange.GetType())
+                    {
+                        while (changes.Count != start_stack_count)
+                        {
+                            Change lch = changes.Pop();
+                            lch.Undo();
+                            change_redo.Push(lch);
+                        }
+                    }
                     lastChange.Undo();
                     change_redo.Push(lastChange);
                 }
@@ -923,7 +935,6 @@ namespace Многоугольники
         {
             try
             {
-                
                 while (change_redo.Peek().GetType() != typeof(Empty))
                 {
                     lastChange = change_redo.Pop();
