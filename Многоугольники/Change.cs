@@ -49,20 +49,22 @@ namespace Многоугольники
         List<int> Dy = new List<int>();
         int dx, dy;
         List<Shape> figures;
+        List<Shape> end_figures= new List<Shape>();
 
         public Move_Change_Dinamic(List<Shape> figures)
         {
             this.figures = figures;
-            for (int number = 0; number < figures.Count(); number++)
+            for (int number = 0; number < this.figures.Count(); number++)
             {
-                if (figures[number].StartX == 0 && figures[number].StartY == 0)
+                if (this.figures[number].StartX == 0 && this.figures[number].StartY == 0)
                 {
-                    /*figures.RemoveAt(number);
-                    number--;*/
+                    end_figures.Add(figures[number]);
+                    this.figures.RemoveAt(number);
+                    number--;
                     continue;
                 }
-                dx = figures[number].StartX - figures[number].X;
-                dy = figures[number].StartY - figures[number].Y;
+                dx = this.figures[number].StartX - this.figures[number].X;
+                dy = this.figures[number].StartY - this.figures[number].Y;
                 Dx.Add(dx);
                 Dy.Add(dy);
             }
@@ -75,13 +77,23 @@ namespace Многоугольники
                 figures[number].X = figures[number].X - Dx[number];
                 figures[number].Y = figures[number].Y - Dy[number];
             }
+            for (int number = 0; number < end_figures.Count(); number++)
+            {
+                figures.Add(end_figures[number]);
+            }
         }
 
         public override void Undo()
         {
-
             for (int number = 0; number < figures.Count(); number++)
             {
+                if (this.figures[number].StartX == 0 && this.figures[number].StartY == 0)
+                {
+                    end_figures.Add(figures[number]);
+                    this.figures.RemoveAt(number);
+                    number--;
+                    continue;
+                }
                 figures[number].X = figures[number].X + Dx[number];
                 figures[number].Y = figures[number].Y + Dy[number];
             }

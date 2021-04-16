@@ -48,11 +48,14 @@ namespace Многоугольники
                 {
                     if (!figures[i].is_polygon)
                     {
-                        changes.Pop();
-                        change_redo.Clear();
-                        Change newChange = new Delete(figures, i);
-                        changes.Push(newChange);
-                        changes.Push(new Empty());
+                        if (!timer_started)
+                        {
+                            changes.Pop();
+                            change_redo.Clear();
+                            Change newChange = new Delete(figures, i);
+                            changes.Push(newChange);
+                            changes.Push(new Empty());
+                        }
                         figures.RemoveAt(i);
                         i--;
                     }
@@ -86,11 +89,6 @@ namespace Многоугольники
                     
                     if (!figures[i].is_polygon && !figures[i].is_checked)
                     {
-                        //changes.Pop();
-                        change_redo.Clear();
-                        Change newChange = new Delete(figures, i);
-                        changes.Push(newChange);
-                        changes.Push(new Empty());
                         figures.RemoveAt(i);
                         i--;
                     }
@@ -370,9 +368,12 @@ namespace Многоугольники
                 if (figure.is_checked)
                 {
                     flag_checked = true;
-                    change_redo.Clear();
-                    Change newChange = new Move_Change(figure.X - e.X + figure.D_X, figure.Y - e.Y + figure.D_Y, figures.IndexOf(figure), figures);
-                    changes.Push(newChange);
+                    if (!timer_started)
+                    {
+                        change_redo.Clear();
+                        Change newChange = new Move_Change(figure.X - e.X + figure.D_X, figure.Y - e.Y + figure.D_Y, figures.IndexOf(figure), figures);
+                        changes.Push(newChange);
+                    }
                     figure.X = e.X - figure.D_X;
                     figure.Y = e.Y - figure.D_Y;
                 }
@@ -458,10 +459,13 @@ namespace Многоугольники
                     {
                         if (e.Button == MouseButtons.Right)
                         {
-                            change_redo.Clear();
-                            Change newChange = new Delete(figures, i);
-                            changes.Push(newChange);
-                            changes.Push(new Empty());
+                            if (!timer_started)
+                            {
+                                change_redo.Clear();
+                                Change newChange = new Delete(figures, i);
+                                changes.Push(newChange);
+                                changes.Push(new Empty());
+                            }
                             figures.RemoveAt(i);
                             break;
                         }
@@ -491,10 +495,13 @@ namespace Многоугольники
                         figures.Add(new Triangle(e.X, e.Y));
                         break;
                 }
-                change_redo.Clear();
-                Change newChange = new Create(figures);
-                changes.Push(newChange);
-                changes.Push(new Empty());
+                if (!timer_started)
+                {
+                    change_redo.Clear();
+                    Change newChange = new Create(figures);
+                    changes.Push(newChange);
+                    changes.Push(new Empty());
+                }
             }
             Refresh();
         }
@@ -662,7 +669,6 @@ namespace Многоугольники
             timer1.Stop();
             timer_started = false;
             change_redo.Clear();
-            
             Change newChange = new Move_Change_Dinamic(figures);
             changes.Push(newChange);
             changes.Push(new Empty());
@@ -678,7 +684,7 @@ namespace Многоугольники
                 figure.StartX = figure.X;
                 figure.StartY = figure.Y;
             }
-            start_stack_count = changes.Count();
+            //start_stack_count = changes.Count();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -914,7 +920,7 @@ namespace Многоугольники
                 {
                     
                     lastChange = changes.Pop();
-                    if (typeof(Move_Change_Dinamic) == lastChange.GetType())
+                    /*if (typeof(Move_Change_Dinamic) == lastChange.GetType())
                     {
                         while (changes.Count != start_stack_count)
                         {
@@ -922,7 +928,7 @@ namespace Многоугольники
                             lch.Undo();
                             change_redo.Push(lch);
                         }
-                    }
+                    }*/
                     lastChange.Undo();
                     change_redo.Push(lastChange);
                 }
